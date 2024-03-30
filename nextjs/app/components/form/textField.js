@@ -1,10 +1,12 @@
-import InputField from "@/app/components/input_field";
+import InputField from "@/app/components/form/input_field";
 
 export default function TextField({
                                       label,
                                       labelFor,
                                       id,
                                       type,
+                                      onChange,
+                                      value,
                                       placeholder,
                                       required,
                                   }) {
@@ -27,6 +29,8 @@ export default function TextField({
                 type={type}
                 id={id}
                 placeholder={placeholder}
+                value={value}
+                onChange={onChange}
             />
         </section>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import FilledButton from "@/app/components/filled-button";
+import FilledButton from "@/app/components/buttons/filled-button";
 import FormCard from "@/app/components/cards/formCard";
 import {useRouter} from "next/navigation";
 

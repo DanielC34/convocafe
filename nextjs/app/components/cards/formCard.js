@@ -1,4 +1,4 @@
-import FilledButton from "@/app/components/filled-button";
+import FilledButton from "@/app/components/buttons/filled-button";
 
 export default function FormCard(
     {

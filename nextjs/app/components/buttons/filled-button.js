@@ -6,6 +6,7 @@ export default function FilledButton(
         stretch,
         onClick,
         children,
+        isLoading
     }
 ) {
 
@@ -18,13 +19,18 @@ export default function FilledButton(
         className += " w-full"
     }
 
+    if (isLoading) {
+        className += " cursor-not-allowed bg-opacity-50 hover:bg-opacity-50 active:bg-opacity-50"
+    }
+
     return (
         <button
             className={className + " hover:shadow-lg h-12 px-8 rounded-md justify-center items-center gap-2 inline-flex"}
+            disabled={isLoading}
             onClick={onClick}
         >
 
-            <p className=" text-base font-medium leading-normal">{children}</p>
+            <p className=" text-base font-medium leading-normal">{isLoading ? "Loading..." : children}</p>
         </button>
     );
 }

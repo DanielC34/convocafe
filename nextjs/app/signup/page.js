@@ -1,9 +1,18 @@
+'use client'
+
 import FormCard from "@/app/components/cards/formCard";
-import TextField from "@/app/components/textField";
-import FilledButton from "@/app/components/filled-button";
+import TextField from "@/app/components/form/textField";
+import FilledButton from "@/app/components/buttons/filled-button";
 import Link from "next/link";
+import {useState} from "react";
 
 export default function SignupPage() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+
     return (
         <main className="
             flex flex-col items-center justify-center
@@ -32,6 +41,8 @@ export default function SignupPage() {
                             type="text"
                             placeholder="username"
                             required={true}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
 
                         <TextField
@@ -41,6 +52,8 @@ export default function SignupPage() {
                             type="email"
                             placeholder="email"
                             required={true}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
 
                         <TextField
@@ -50,6 +63,8 @@ export default function SignupPage() {
                             type="password"
                             placeholder="password"
                             required={true}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         <TextField
                             label="Confirm Password"
@@ -58,6 +73,8 @@ export default function SignupPage() {
                             type="password"
                             placeholder="confirm password"
                             required={true}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                     </div>
 

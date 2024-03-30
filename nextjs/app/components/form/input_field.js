@@ -1,11 +1,15 @@
 export default function InputField({
+                                       id,
                                        type,
                                        placeholder,
+                                       value,
+                                       onChange,
                                        required,
 
                                    }) {
     return (
         <input
+            id={id}
             type={type}
             className="
                     w-full
@@ -15,6 +19,8 @@ export default function InputField({
                     focus:border-zinc-400
                     p-2.5"
             placeholder={placeholder}
+            value={value}
+            onChange={onChange}
             required={required}
         />
     );
