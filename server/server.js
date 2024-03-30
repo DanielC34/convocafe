@@ -1,26 +1,28 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const { chats } = require('./data/data');
-const connectDB = require('./config/database');
+const authRouter = require("./routes/auth");
+const bodyParser = require("body-parser");
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
 dotenv.config();
 
-connectDB();
+// connectDB();
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send("API running successfully!");
+app.get('/status', (req, res) => {
+    res.send({
+        message: 'Server is running',
+        status: 200
+    });
 });
 
-app.get('/api/chat', (req, res) => {
-    res.send(chats);
-});
-
-app.get("/api/chat/:id", (req, res) => {
-    const singleChat = chats.find((c) => c._id === req.params.id);
-    res.send(singleChat);
- })
-
+app.use(cors()); // Enable CORS for all routes
+app.use(helmet()); // Set secure HTTP headers
+app.use(morgan('dev')); // Log HTTP requests
+app.use(bodyParser.json());
+app.use(authRouter);
 
 const PORT = process.env.PORT || 3001;
 
