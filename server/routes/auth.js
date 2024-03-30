@@ -28,12 +28,12 @@ authRouter.post('/login', (req, res) => {
     const {email, password} = req.body;
     // Basic validation
     if (!email || !password) {
-        return res.status(400).send('Missing email or password');
+        return res.status(400).send({msg: 'Missing email or password'});
     }
     // Check if user exists and password matches
     const user = users.find(user => user.email === email && user.password === password);
     if (!user) {
-        return res.status(401).send('Invalid email or password');
+        return res.status(401).send({msg: 'Invalid email or password'});
     }
 
     // Create and sign a token

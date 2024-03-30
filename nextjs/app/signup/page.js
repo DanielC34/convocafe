@@ -5,13 +5,18 @@ import TextField from "@/app/components/form/textField";
 import FilledButton from "@/app/components/buttons/filled-button";
 import Link from "next/link";
 import {useState} from "react";
+import {isNotAuth} from "@/app/utils/auth";
 
-export default function SignupPage() {
+const SignupPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    async function handleSignup(e) {
+        e.preventDefault();
+        console.log(email, password, username, confirmPassword)
+    }
 
     return (
         <main className="
@@ -24,7 +29,9 @@ export default function SignupPage() {
                 <form className="
                         w-full
                         space-y-10
-                ">
+                    "
+                      onSubmit={handleSignup}
+                >
                     <div className="text-center">
                         <div className="text-stone-900 text-4xl font-semibold leading-10 mb-5">
                             Sign up
@@ -97,3 +104,6 @@ export default function SignupPage() {
         </main>
     );
 }
+
+
+export default isNotAuth(SignupPage);
