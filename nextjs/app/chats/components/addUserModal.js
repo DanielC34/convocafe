@@ -1,5 +1,8 @@
 import {useEffect, useState} from "react";
 import FilledButton from "@/components/buttons/filled-button";
+import {useUserStore} from "@/app/chats/stores/users";
+import {useRouter} from "next/navigation";
+import {useModalStore} from "@/app/chats/stores/modal";
 
 const AddUserModal = ({onClose}) => {
     const [users, setUsers] = useState([]);
@@ -76,28 +79,46 @@ const AddUserListSkeleton = () => {
 
 }
 const AddUserList = ({users}) => {
+    const addUserToStore = useUserStore(state => state.addUser)
+    const closeModal = useModalStore(state => state.close)
+    const usersWithChat = useUserStore(state => state.userIDs)
+    const router = useRouter()
+
     return (
         <div className="mt-4">
-            {users.map((user, index) => (
-                <div key={index} className="
+            {users.map((user, index) => {
+                const alreadyChatting = usersWithChat[+user.id];
+                return (
+                    <div
+                        key={index}
+                        className={`
                             flex justify-between items-center
                             py-2
                             border-b
-                        ">
-                    <div>
-                        <h3 className="text-lg">{user.username}</h3>
-                        <p className="text-sm text-gray-500">{user.email}</p>
+                            ${alreadyChatting ? 'opacity-50 pointer-events-none' : ''}
+                         `}
+
+                            >
+                        <div>
+                            <h3 className="text-lg">{user.username}</h3>
+                            <p className="text-sm text-gray-500">{user.email}</p>
+                        </div>
+                        {(!alreadyChatting && <FilledButton
+                            dense
+                            onClick={() => {
+                                // add user to chat
+                                addUserToStore(user)
+
+                                // navigate to chat page
+                                router.push(`/chats/${user.id}`)
+
+                                // close modal
+                                closeModal()
+                            }}
+                        >Chat</FilledButton>)}
                     </div>
-                    <FilledButton
-                        dense
-                        onClick={() => {
-                            console.log('chat with user')
-                        }}
-                    >
-                        Chat
-                    </FilledButton>
-                </div>
-            ))}
+                );
+            })}
         </div>
     )
 }
@@ -106,7 +127,7 @@ const AddUserList = ({users}) => {
 async function fetchUsers() {
 
     // sleep for 2 seconds
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     return [
         {

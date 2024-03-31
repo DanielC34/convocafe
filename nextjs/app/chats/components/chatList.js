@@ -10,7 +10,7 @@ const ChatListView = ({userID}) => {
 
     return (
         <div className="
-            w-full h-full flex-col justify-start items-start gap-2.5 inline-flex
+            w-full h-full flex-col justify-start items-start inline-flex
             overflow-y-auto
         ">
             {messages.map((message, index) => (

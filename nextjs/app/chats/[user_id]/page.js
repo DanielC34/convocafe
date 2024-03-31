@@ -36,7 +36,7 @@ export default function Page() {
                 w-full py-1
                 flex justify-between items-center
             ">
-                <h2 className="text-2xl">Paul George</h2>
+                <h2 className="text-2xl"> {foundUser.username}</h2>
                 <div className="
                     flex justify-end items-center
                     gap-2.5

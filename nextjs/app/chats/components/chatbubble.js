@@ -9,7 +9,7 @@ const ChatBubble = ({message}) => {
             "rounded-tr-lg bg-gray-200";
 
     return (
-        <div className={`w-full p-2.5 flex-col justify-start gap-2.5 inline-flex ${containerClass}`}>
+        <div className={`w-full px-2 py-1 flex-col justify-start gap-2.5 inline-flex ${containerClass}`}>
             <div className={`px-2.5 items-start gap-1.5 inline-flex`}>
                 {
                     !message.isOwner && (
@@ -35,6 +35,7 @@ const ChatBubble = ({message}) => {
                     <div
                         className={`
                             p-2.5 justify-center items-start gap-2.5 inline-flex 
+                            max-w-[400px]
                             rounded-bl-lg rounded-br-lg ${bubbleClass}`}>
                         <p
                             className="grow shrink basis-0 text-zinc-700 text-lg font-medium leading-relaxed">
