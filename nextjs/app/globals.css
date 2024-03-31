@@ -31,3 +31,14 @@ body {
     text-wrap: balance;
   }
 }
+
+
+@keyframes pulse {
+  0% { background-color: #f3f3f3; }
+  50% { background-color: #e0e0e0; }
+  100% { background-color: #f3f3f3; }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}

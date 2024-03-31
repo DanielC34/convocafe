@@ -1,8 +1,21 @@
+'use client'
+
 import Image from "next/image";
+import {useMessageStore} from "@/app/chats/stores/chats";
+import {useRouter} from "next/navigation";
 
-const ChatUserTile = ({user, selected, onClick}) => {
+const ChatUserTile = ({user}) => {
+    const router = useRouter();
+    const selectedUserID = useMessageStore(state => state.selectedUserID);
+    const selectID = useMessageStore(state => state.setSelectedUserID);
 
+    const selected = selectedUserID === user.id;
     const activeClass = selected ? "bg-[#F5F5DC]" : "";
+
+    async function handleClick(userID) {
+        selectID(userID);
+        router.push(`/chats/${userID}`);
+    }
 
     return (
         <div
@@ -12,7 +25,7 @@ const ChatUserTile = ({user, selected, onClick}) => {
                 active:bg-[#F5F5DC]
                 ${activeClass}
             `}
-            onClick={onClick}
+            onClick={() => handleClick(user.id)}
         >
             <div className="p-3 bg-stone-200 rounded-full justify-center items-center flex">
                 <Image

@@ -3,10 +3,10 @@
 import Image from "next/image";
 import FilledButton from "@/components/buttons/filled-button";
 import UserList from "@/app/chats/components/userList";
-import {useRouter} from "next/navigation";
+import {useModalStore} from "@/app/chats/stores/modal";
 
 const SideBar = () => {
-    const router = useRouter();
+    const openModal = useModalStore(state => state.open)
     return (
         <>
             <div className="
@@ -24,9 +24,7 @@ const SideBar = () => {
                 <FilledButton
                     dense
                     type="secondary"
-                    onClick={() => {
-                        router.push('/chats/23');
-                    }}
+                    onClick={openModal}
                 >Add user</FilledButton>
             </div>
             <UserList/>

@@ -1,11 +1,10 @@
 'use client'
 import FilledButton from "@/components/buttons/filled-button";
 import FormCard from "@/components/cards/formCard";
-import {useRouter} from "next/navigation";
+import {useModalStore} from "@/app/chats/stores/modal";
 
-export default function Page({params}) {
-
-    const router = useRouter();
+export default function Page() {
+    const openModal = useModalStore(state => state.open)
 
     return (
         <main className="flex h-full justify-center items-center">
@@ -20,9 +19,7 @@ export default function Page({params}) {
                 <FilledButton
                     stretch
                     // type='secondary'
-                    onClick={() => {
-                        router.push('/chats/23');
-                    }}
+                    onClick={openModal}
                 >Add user</FilledButton>
 
             </FormCard>

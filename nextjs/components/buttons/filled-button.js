@@ -11,11 +11,22 @@ export default function FilledButton(
     }
 ) {
 
-    let className = "bg-amber-50 text-black hover:bg-amber-100 active:bg-amber-50"
-    if (type === "primary") {
-        className = "bg-stone-900 text-amber-50 hover:bg-stone-800 active:bg-stone-900"
-    } else if (type === "secondary") {
-        className = "bg-white text-stone-900 hover:bg-stone-100 active:bg-stone-50"
+    let className = ""
+
+    switch (type) {
+        case "primary":
+            className = "bg-stone-900 text-amber-50 hover:bg-stone-800 active:bg-stone-900"
+            break;
+        case "secondary":
+            className = "bg-white text-stone-900 hover:bg-stone-100 active:bg-stone-50"
+            break;
+        case "danger":
+            className = "bg-red-500 text-white hover:bg-red-600 active:bg-red-500"
+            break;
+        default:
+            className = "bg-amber-50 text-black hover:bg-amber-100 active:bg-amber-50"
+            break;
+
     }
 
     if (stretch) {
