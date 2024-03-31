@@ -1,13 +1,13 @@
 'use client'
 
-import FilledButton from "@/app/components/buttons/filled-button";
-import FormCard from "@/app/components/cards/formCard";
-import TextField from "@/app/components/form/textField";
+import FilledButton from "@/components/buttons/filled-button";
+import FormCard from "@/components/cards/formCard";
+import TextField from "@/components/form/textField";
 import Link from "next/link";
 import {useState} from "react";
-import axios from "@/app/http/axios";
-import Snackbar from "@/app/components/snackbar";
-import {isNotAuth} from "@/app/utils/auth";
+import axios from "@/http/axios";
+import Snackbar from "@/components/snackbar";
+import {isNotAuth} from "@/utils/auth";
 
 const loginPage = () => {
     const [email, setEmail] = useState("");
@@ -43,11 +43,11 @@ const loginPage = () => {
         <>
             <Snackbar message={error} type="error"/>
             <main className="
-            flex flex-col items-center justify-center
-            bg-amber-50
-            min-h-screen
-            p-24
-        ">
+                flex flex-col items-center justify-center
+                bg-amber-50
+                min-h-screen
+                p-24
+            ">
                 <FormCard>
                     <form
                         className="

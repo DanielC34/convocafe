@@ -1,7 +1,7 @@
 'use client'
 
-import FormCard from "@/app/components/cards/formCard";
-import FilledButton from "@/app/components/buttons/filled-button";
+import FormCard from "@/components/cards/formCard";
+import FilledButton from "@/components/buttons/filled-button";
 import {useRouter} from "next/navigation";
 
 export default function GettingStartedPage() {

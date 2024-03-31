@@ -1,9 +1,9 @@
 'use client'
 
-import FilledButton from "@/app/components/buttons/filled-button";
-import FormCard from "@/app/components/cards/formCard";
+import FilledButton from "@/components/buttons/filled-button";
+import FormCard from "@/components/cards/formCard";
 import {useRouter} from "next/navigation";
-import {isAuth} from "@/app/utils/auth";
+import {isAuth} from "@/utils/auth";
 
 const ChatPage = () => {
     const router = useRouter();

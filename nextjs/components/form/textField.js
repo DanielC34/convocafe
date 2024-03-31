@@ -1,4 +1,4 @@
-import InputField from "@/app/components/form/input_field";
+import InputField from "@/components/form/input_field";
 
 export default function TextField({
                                       label,
