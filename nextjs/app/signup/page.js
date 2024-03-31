@@ -8,8 +8,10 @@ import {useState} from "react";
 import {isNotAuth} from "@/utils/auth";
 import axios from "@/http/axios";
 import Snackbar from "@/components/snackbar";
+import {useRouter} from "next/navigation";
 
 const SignupPage = () => {
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
@@ -25,11 +27,21 @@ const SignupPage = () => {
         setError(null)
 
         try {
+            console.log('checking password match')
             if (password !== confirmPassword) {
                 setError("Passwords do not match")
                 return
             }
+            console.log("sending request")
             const res = await axios.post('/signup', {email, password, username})
+            console.log("done sending request")
+            if (res.status === 201) {
+                router.push('/login')
+                setUsername('')
+                setEmail('')
+                setPassword('')
+                setConfirmPassword('')
+            }
         } catch (err) {
             if (err.response.data.msg) {
                 setError(err.response.data.msg)
@@ -50,7 +62,7 @@ const SignupPage = () => {
             min-h-screen
             p-24
             ">
-                <FormCard>
+                <FormCard className="shadow-2xl">
                     <form className="
                         w-full
                         space-y-10

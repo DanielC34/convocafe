@@ -1,6 +1,6 @@
 //messageModel defines what info about the messages is to be stored
 //namely the sender of the message, the content of the message
-//and which chat the message belongs to/ who it is meant for
+//and which chats the message belongs to/ who it is meant for
 //be it one user or a group of users
 
 

@@ -1,13 +1,13 @@
-//chatModel defines the structure of the chat info in the database
-// Each chat will include chat name, check if the chat is a one-to-one
-// or if it is a group chat, includes the user(s) participating in the chat
-// keeps track of most recent message sent in the chat
-// In the case of a group chat being involved, the groupAdmin field stores the ID of the chat group admin
+//chatModel defines the structure of the chats info in the database
+// Each chats will include chats name, check if the chats is a one-to-one
+// or if it is a group chats, includes the user(s) participating in the chats
+// keeps track of most recent message sent in the chats
+// In the case of a group chats being involved, the groupAdmin field stores the ID of the chats group admin
 
 
 const mongoose = require('mongoose');
 
-//Define schema for a chat
+//Define schema for a chats
 const chatSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },

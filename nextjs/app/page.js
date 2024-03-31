@@ -1,21 +1,36 @@
 'use client'
 
 import FilledButton from "@/components/buttons/filled-button";
-import FormCard from "@/components/cards/formCard";
 import {useRouter} from "next/navigation";
 import {isAuth} from "@/utils/auth";
+import FormCard from "@/components/cards/formCard";
 
 const ChatPage = () => {
     const router = useRouter();
     return (
-        <main className="flex bg-amber-50 min-h-screen flex-col items-center justify-center p-24">
-            <FormCard>
-                <h1>Get Started</h1>
-            </FormCard>
+        <main className="flex h-screen justify-center items-center">
+            <FormCard
+                color="[#EEEDE8]"
+            >
+                <div className="gap-1 text-center w-full">
+                    <h2 className="text-2xl font-medium">Welcome to Convocate</h2>
+                    <p>Chat with different people</p>
+                </div>
 
+                <FilledButton
+                    type='primary'
+                    stretch
+                >Go to chats</FilledButton>
+            </FormCard>
         </main>
+
     );
 }
-
 export default isAuth(ChatPage);
+
+
+
+
+
+
 

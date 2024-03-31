@@ -8,7 +8,7 @@ export default function GettingStartedPage() {
     const router = useRouter();
     return (
         <main className="flex bg-amber-50 min-h-screen flex-col items-center justify-center p-24">
-            <FormCard>
+            <FormCard className="shadow-2xl">
                 <div className="w-full justify-center items-center inline-flex">
                     <img className="w-[187px] h-[168px]" src="/logo.png" alt='logo'/>
                 </div>

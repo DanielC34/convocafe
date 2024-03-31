@@ -48,7 +48,7 @@ const loginPage = () => {
                 min-h-screen
                 p-24
             ">
-                <FormCard>
+                <FormCard className="shadow-2xl">
                     <form
                         className="
                         w-full
@@ -107,7 +107,6 @@ const loginPage = () => {
 
                     </form>
                 </FormCard>
-
             </main>
         </>
     );
