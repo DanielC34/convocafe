@@ -5,11 +5,34 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const http = require('http');
+const socketIo = require('socket.io');
 
 dotenv.config();
 
 // connectDB();
 const app = express();
+const httpServer = http.createServer(app);
+const io = new socketIo.Server(httpServer, {
+    cors: {
+        origin: '*',
+    }
+});
+
+
+io.on('connection', (socket) => {
+    console.log('User connected');
+
+    socket.on('chats message', (msg) => {
+        console.log('message: ' + JSON.stringify(msg));
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+
+});
+
 
 app.get('/status', (req, res) => {
     res.send({
@@ -26,6 +49,6 @@ app.use(authRouter);
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
