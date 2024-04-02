@@ -4,23 +4,23 @@ const mustBeAuthenticated = require("../middleware");
 const authRouter = express.Router();
 
 
-// In-memory user store
+// In-memory user stores
 let users = [];
 
 authRouter.post('/signup', (req, res) => {
     const {email, username, password} = req.body;
     // Basic validation
     if (!email || !username || !password) {
-        return res.status(400).send('Missing email, username, or password');
+        return res.status(400).send({msg: 'Missing email, username, or password'});
     }
     // Check if user already exists
     const userExists = users.some(user => user.email === email);
     if (userExists) {
-        return res.status(400).send('User already exists');
+        return res.status(400).send({msg: 'User already exists'});
     }
-    // Add user to the store
+    // Add user to the stores
     users.push({email, username, password});
-    res.status(201).send('User created');
+    res.status(201).send({msg: 'User created'});
 });
 
 
@@ -49,7 +49,7 @@ authRouter.get('/users/me', (req, res) => {
     const user = users.find(user => user.email === req.user.email);
 
     if (!user) {
-        return res.status(404).send('User not found');
+        return res.status(404).send({msg: 'User not found'});
     }
 
     res.status(200).send(user);

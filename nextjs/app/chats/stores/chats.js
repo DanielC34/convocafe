@@ -10,8 +10,6 @@ export const useMessageStore = create((set) => ({
             },
         ]
     },
-    selectedUserID: null,
-    setSelectedUserID: (userID) => set({selectedUserID: userID}),
     addMessage: (userID, message) => set((state) => {
 
         console.log('message', message)

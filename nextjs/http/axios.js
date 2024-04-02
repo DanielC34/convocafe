@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3001';
+const baseURL = process.env.SERVER_URL;
 
 const instance = axios.create({
     baseURL: baseURL,
@@ -20,7 +20,6 @@ instance.interceptors.request.use(async (config) => {
 });
 
 instance.interceptors.response.use((response) => {
-    // console.log(response);
     if (response.status === 401 && response.headers['X_Invalidate_Token']) {
         localStorage.removeItem('token');
         window.location.href = '/login';

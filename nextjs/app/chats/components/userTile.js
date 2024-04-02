@@ -3,17 +3,20 @@
 import Image from "next/image";
 import {useMessageStore} from "@/app/chats/stores/chats";
 import {useRouter} from "next/navigation";
+import {useUserSelectedStore} from "@/app/chats/stores/users";
 
 const ChatUserTile = ({user}) => {
     const router = useRouter();
-    const selectedUserID = useMessageStore(state => state.selectedUserID);
-    const selectID = useMessageStore(state => state.setSelectedUserID);
+    // const selectedUserID = useMessageStore(state => state.selectedUserID);
+    const selectedId = useUserSelectedStore(state => state.userId);
+    const setSelectedUserID = useUserSelectedStore(state => state.setUserID);
 
-    const selected = selectedUserID === user.id;
+    const selected = selectedId === user.id;
     const activeClass = selected ? "bg-[#F5F5DC]" : "";
+    // const activeClass = "bg-[#F5F5DC]";
 
     async function handleClick(userID) {
-        selectID(userID);
+        setSelectedUserID(userID);
         router.push(`/chats/${userID}`);
     }
 
@@ -37,7 +40,11 @@ const ChatUserTile = ({user}) => {
                 />
             </div>
             <div
-                className="grow shrink line-clamp-1	basis-0 text-stone-900 text-sm font-medium leading-relaxed">
+                className="
+                    grow shrink line-clamp-1
+                    basis-0 text-stone-900 text-sm font-medium
+                    leading-relaxed
+                ">
                 {user.username}
             </div>
         </div>

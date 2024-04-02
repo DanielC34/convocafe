@@ -11,5 +11,11 @@ export const useUserStore = create((set) => ({
             userIDs: {...state.userIDs, [user.id]: user}
         });
     }),
-
 }));
+
+
+export const useUserSelectedStore = create((set) => ({
+    userId: 0,
+    setUserID: (userID) => set({userId: userID}),
+}));
+

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import FilledButton from "@/components/buttons/filled-button";
-import {useUserStore} from "@/app/chats/stores/users";
+import {useUserSelectedStore, useUserStore} from "@/app/chats/stores/users";
 import {useRouter} from "next/navigation";
 import {useModalStore} from "@/app/chats/stores/modal";
 
@@ -80,9 +80,25 @@ const AddUserListSkeleton = () => {
 }
 const AddUserList = ({users}) => {
     const addUserToStore = useUserStore(state => state.addUser)
+    const setSelectedUserID = useUserSelectedStore(state => state.setUserID)
     const closeModal = useModalStore(state => state.close)
     const usersWithChat = useUserStore(state => state.userIDs)
     const router = useRouter()
+
+
+    function onChatClick(user) {
+        // add user to chat
+        addUserToStore(user)
+
+        // set selected user id
+        setSelectedUserID(user.id)
+
+        // navigate to chat page
+        router.push(`/chats/${user.id}`)
+
+        // close modal
+        closeModal()
+    }
 
     return (
         <div className="mt-4">
@@ -105,16 +121,7 @@ const AddUserList = ({users}) => {
                         </div>
                         {(!alreadyChatting && <FilledButton
                             dense
-                            onClick={() => {
-                                // add user to chat
-                                addUserToStore(user)
-
-                                // navigate to chat page
-                                router.push(`/chats/${user.id}`)
-
-                                // close modal
-                                closeModal()
-                            }}
+                            onClick={() => onChatClick(user)}
                         >Chat</FilledButton>)}
                     </div>
                 );
@@ -125,7 +132,6 @@ const AddUserList = ({users}) => {
 
 
 async function fetchUsers() {
-
     // sleep for 2 seconds
     await new Promise(resolve => setTimeout(resolve, 500));
 

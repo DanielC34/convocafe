@@ -4,11 +4,13 @@ import InputField from "@/components/form/input_field";
 import FilledButton from "@/components/buttons/filled-button";
 import {useState} from "react";
 import {useMessageStore} from "@/app/chats/stores/chats";
+import {useSocketStore} from "@/app/stores/socket";
 
 const ChatTextInput = ({userID}) => {
     const [message, setMessage] = useState('');
     const storedMessagesData = useMessageStore(state => state.messages);
     const addMessage = useMessageStore(state => state.addMessage);
+    // const socket = useSocketStore(state => state.socket);
 
     const storedMessages = storedMessagesData[userID] || [];
     async function handleSubmit(e) {
@@ -23,6 +25,11 @@ const ChatTextInput = ({userID}) => {
             isOwner: true,
             receiverID: userID
         };
+
+        // console.log("send-message: " , msg)
+        // console.log("socket: ", socket)
+
+        // socket.emit("send-message", msg);
 
         addMessage(userID, msg)
         setMessage('');

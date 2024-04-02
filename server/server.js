@@ -31,6 +31,11 @@ io.on('connection', (socket) => {
         console.log('User disconnected');
     });
 
+    socket.on('send-message', (msg) => {
+        console.log('message: ' + JSON.stringify(msg));
+        io.emit('receive-message', msg);
+    });
+
 });
 
 

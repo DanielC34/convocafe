@@ -11,12 +11,14 @@ const UserList = () => {
             overflow-y-auto
             divide-y-2
         ">
-            {users.map((user, index) => (
+            {
+                users.map((user, index) => (
                 <UserTile
-                    key={index}
+                    key={user.id}
                     user={user}
                 />
-            ))}
+            ))
+            }
         </div>
     )
 }
