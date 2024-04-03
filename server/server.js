@@ -9,6 +9,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
+const messagesRouter = require("./routes/messages");
 
 dotenv.config();
 
@@ -65,6 +66,7 @@ app.use(morgan('dev')); // Log HTTP requests
 app.use(bodyParser.json());
 app.use(authRouter);
 app.use(userRouter);
+app.use(messagesRouter);
 
 const PORT = process.env.PORT || 3001;
 
