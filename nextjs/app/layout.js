@@ -14,9 +14,9 @@ export default function RootLayout({children}) {
     return (
         <html lang="en">
         <body className={inter.className}>
-        {/*<ClientLayout socketURL={socketUrl}>*/}
+        <ClientLayout socketURL={socketUrl}>
             {children}
-        {/*</ClientLayout>*/}
+        </ClientLayout>
         </body>
         </html>
     );

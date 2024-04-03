@@ -6,18 +6,18 @@ import {useSocketStore} from "@/app/stores/socket";
 
 export default function ClientLayout({socketURL, children}) {
 
-    // const socket = io("http://localhost:3001");
-    // const setSocket = useSocketStore(state => state.setSocket);
+    const socket = io("http://localhost:3001");
+    const setSocket = useSocketStore(state => state.setSocket);
 
-    // useEffect(() => {
-    //     socket.on("connect", () => {
-    //         console.log("Connected to server");
-    //     });
-    //
-    //     socket.on("disconnect", () => {
-    //         console.log("Disconnected from server");
-    //     });
-    //
+    useEffect(() => {
+        socket.on("connect", () => {
+            console.log(`Connected to server: ${socket.id}`);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("Disconnected from server");
+        });
+
     //     socket.on("connect_error", (error) => {
     //         console.error("Connection error: ", error);
     //
@@ -37,10 +37,11 @@ export default function ClientLayout({socketURL, children}) {
     //         console.log("Reconnected to server on attempt: ", attempt);
     //     });
     //
-    //     // setSocket(socket);
-    //     return () => {
-    //         socket.disconnect();
-    //     };
-    // }, []);
+        setSocket(socket);
+        return () => {
+            console.log(`Disconnecting from server ${socket.id}`);
+            // socket.disconnect();
+        };
+    }, []);
     return children
 }

@@ -1,4 +1,5 @@
 import {create} from "zustand";
+import {useSocketStore} from "@/app/stores/socket";
 
 export const useMessageStore = create((set) => ({
     messages: {
@@ -15,6 +16,8 @@ export const useMessageStore = create((set) => ({
         console.log('message', message)
 
         const newMessages = {...state.messages};
+
+        useSocketStore.getState().socket.emit("message", message);
 
         if (!newMessages[userID]) {
             newMessages[userID] = [message];
