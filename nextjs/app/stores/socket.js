@@ -1,12 +1,30 @@
 import {create} from "zustand";
+import {io} from "socket.io-client";
 
-export const useSocketStore = create((set) => ({
+export const useSocketStore = create((set, get) => ({
     socket: null,
-    setSocket: (conn) => set((state) => {
-        if (state.socket) {
-            // state.socket.disconnect();
-            return ({socket: state.socket});
+    connect: (url) => {
+
+        if (get().socket) {
+            return;
         }
-        return ({socket: conn});
-    })
+
+        const socket = io(url);
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('connect_error', (error) => {
+            console.error('Connection error: ', error);
+        });
+
+
+        set({socket});
+    },
+
 }))

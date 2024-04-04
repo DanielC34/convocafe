@@ -26,20 +26,6 @@ export const useUserStore = create((set) => ({
         }
     },
 
-    fetchChatUsers: async () => {
-        const res = await axios.get('/chats');
-
-        res.data
-        const users = await response.json();
-        users.forEach(user => {
-            set((state) => {
-                return ({
-                    users: [...state.users, user],
-                    userIDs: {...state.userIDs, [user.id]: user}
-                });
-            });
-        });
-    },
 }));
 
 

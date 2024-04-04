@@ -18,7 +18,6 @@ export default function Page() {
     const chatId = params.id;
 
     const chat = findChat(chatId);
-    let receiver;
 
     useEffect(() => {
         if (!chat) {
@@ -26,14 +25,12 @@ export default function Page() {
             return
         }
         selectChat(chatId)
-
-        if (authUser)
-            receiver = chat.participants.find((user) => user.id !== authUser?.id)
     }, [authUser]);
 
     if (!chat) {
         return null
     }
+    const recipient = chat.participants.find((user) => user.id !== authUser?.id)
 
     return (
         <>
@@ -41,7 +38,7 @@ export default function Page() {
                 w-full py-1
                 flex justify-between items-center
             ">
-                <h2 className="text-2xl"> {receiver?.username}</h2>
+                <h2 className="text-2xl"> {recipient.username}</h2>
                 <div className="
                     flex justify-end items-center
                     gap-2.5
@@ -52,7 +49,7 @@ export default function Page() {
 
             <Divider/>
             <MessagesListView chatId={chatId}/>
-            <ChatTextInput chatId={chatId} receiverId={receiver?.id}/>
+            <ChatTextInput chatId={chatId} recipientId={recipient?.id}/>
         </>
     )
 }

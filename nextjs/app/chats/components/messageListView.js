@@ -2,11 +2,16 @@
 
 import ChatBubble from "@/app/chats/components/chatbubble";
 import {useMessageStore} from "@/app/chats/stores/chats";
+import {useEffect} from "react";
 
 const MessagesListView = ({chatId}) => {
     const messagesData = useMessageStore(state => state.messages);
+    const handleMessageReceived = useMessageStore(state => state.handleMessageReceived);
 
     const messages = messagesData[chatId] || [];
+    useEffect(() => {
+        handleMessageReceived(chatId)
+    }, [])
 
     return (
         <div className="

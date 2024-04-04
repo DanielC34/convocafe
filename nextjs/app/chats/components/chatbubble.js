@@ -26,9 +26,9 @@ const ChatBubble = ({message}) => {
                 }
                 <div className="grow shrink basis-0 flex-col justify-center items-start gap-1.5 inline-flex">
                     {
-                        message.sender && (
-                            <p className="self-stretch text-neutral-400 text-sm font-medium  leading-tight">
-                                {message.sender || 'You'}
+                        message.sender && !message.isOwner && (
+                            <p className="text-neutral-400 text-sm font-medium  leading-tight">
+                                {message.sender.username || 'You'}
                             </p>
                         )
                     }
@@ -39,7 +39,7 @@ const ChatBubble = ({message}) => {
                             rounded-bl-lg rounded-br-lg ${bubbleClass}`}>
                         <p
                             className="grow shrink basis-0 text-zinc-700 text-lg font-medium leading-relaxed">
-                            {message.text}
+                            {message.content}
                         </p>
                     </div>
                 </div>

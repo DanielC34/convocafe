@@ -4,36 +4,24 @@ import InputField from "@/components/form/input_field";
 import FilledButton from "@/components/buttons/filled-button";
 import {useState} from "react";
 import {useMessageStore} from "@/app/chats/stores/chats";
-import {useSocketStore} from "@/app/stores/socket";
 
-const ChatTextInput = ({chatId, receiverId}) => {
+const ChatTextInput = ({chatId, recipientId}) => {
     const [message, setMessage] = useState('');
-    const storedMessagesData = useMessageStore(state => state.messages);
-    const addMessage = useMessageStore(state => state.addMessage);
-    // const socket = useSocketStore(state => state.socket);
+    const sendMessage = useMessageStore(state => state.sendMessage);
 
-    const storedMessages = storedMessagesData[chatId] || [];
     async function handleSubmit(e) {
         e.preventDefault();
 
         if (!message.trim()) return;
 
         const msg = {
-            id: storedMessages.length + 1,
-            text: message.trim(),
-            time: new Date().toLocaleTimeString(),
-            isOwner: true,
-            receiverID: receiverId
+            content: message.trim(),
+            recipientId,
+            chatId
         };
 
-        // console.log("send-message: " , msg)
-        // console.log("socket: ", socket)
-
-        // socket.emit("send-message", msg);
-
-        addMessage(userID, msg)
+        await sendMessage(msg, chatId)
         setMessage('');
-
     }
 
 

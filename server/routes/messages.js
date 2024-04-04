@@ -11,7 +11,14 @@ messagesRouter.get('/messages', async (req, res) => {
         return res.status(400).json({error: 'Chat ID is required'});
     }
 
-    const messages = await Message.find({chat: chatID}).populate('sender', 'username');
+    let messages = await Message.find({chat: chatID}).populate('sender', 'username');
+
+    // Add the isOwner property to each message
+    messages = messages.map(message => {
+        message = message.toObject(); // Convert the message document to a plain JavaScript object
+        message.isOwner = String(message.sender.id) === req.user.id; // Add the isOwner property
+        return message;
+    });
 
     res.json(messages);
 });
@@ -39,11 +46,16 @@ messagesRouter.post('/messages', async (req, res) => {
             content,
         });
 
-        await message.save();
+        await message.save()
 
-        req.app.io.emit(`message/${chatId}`, message);
+        const populatedMessage = await Message.populate(message, 'sender');
 
-        res.json(message);
+        req.app.io.emit(`message/${chatId}`, populatedMessage);
+
+        let msgObj = populatedMessage.toObject();
+        msgObj.isOwner = true;
+
+        res.json(msgObj);
     } catch (error) {
         console.log(error);
         res.status(500).json({error: 'Error saving message'});

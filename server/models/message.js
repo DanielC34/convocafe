@@ -19,7 +19,17 @@ const messageSchema = new Schema({
                 return ret;
             },
         }, // Allows virtual fields to be returned when model is converted to JSON
-        toObject: {virtuals: true} // Allows virtual fields to be returned when model is converted to an object
+        toObject: {
+            virtuals: true,
+            transform: function (doc, ret) {
+                // Add id field with value of _id
+                ret.id = ret._id;
+                // Delete _id and __v
+                delete ret._id;
+                delete ret.__v;
+                return ret;
+            },
+        } // Allows virtual fields to be returned when model is converted to an object
     }
 );
 
