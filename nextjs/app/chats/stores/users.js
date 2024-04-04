@@ -1,4 +1,5 @@
 import {create} from "zustand";
+import axios from "@/http/axios";
 
 export const useUserStore = create((set) => ({
     users: [],
@@ -11,6 +12,20 @@ export const useUserStore = create((set) => ({
             userIDs: {...state.userIDs, [user.id]: user}
         });
     }),
+    fetchChatUsers: async () => {
+        const res = await axios.get('/chats');
+        
+        res.data
+        const users = await response.json();
+        users.forEach(user => {
+            set((state) => {
+                return ({
+                    users: [...state.users, user],
+                    userIDs: {...state.userIDs, [user.id]: user}
+                });
+            });
+        });
+    },
 }));
 
 

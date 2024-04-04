@@ -2,9 +2,16 @@
 import FilledButton from "@/components/buttons/filled-button";
 import FormCard from "@/components/cards/formCard";
 import {useModalStore} from "@/app/chats/stores/modal";
+import {useEffect} from "react";
+import {useAuthStore} from "@/app/stores/auth";
 
 export default function Page() {
     const openModal = useModalStore(state => state.open)
+    const fetchCurrentUser = useAuthStore(state => state.fetchCurrentUser)
+    useEffect(() => {
+        fetchCurrentUser()
+
+    }, [])
 
     return (
         <main className="flex h-full justify-center items-center">

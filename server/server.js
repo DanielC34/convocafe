@@ -52,6 +52,7 @@ io.on('connection', (socket) => {
 
 });
 
+app.io = io;
 
 app.get('/status', (req, res) => {
     res.send({

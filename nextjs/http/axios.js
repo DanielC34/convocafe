@@ -3,7 +3,7 @@ import axios from 'axios';
 const baseURL = process.env.SERVER_URL;
 
 const instance = axios.create({
-    baseURL: baseURL,
+    baseURL: "http://localhost:3001",
     timeout: 1000,
     headers: {
         "Content-Type": "application/json",
@@ -20,11 +20,15 @@ instance.interceptors.request.use(async (config) => {
 });
 
 instance.interceptors.response.use((response) => {
-    if (response.status === 401 && response.headers['X_Invalidate_Token']) {
+    return response;
+}, (error) => {
+    const response = error.response;
+    if (response.status === 403 && response.data && response.data.invalidToken) {
         localStorage.removeItem('token');
         window.location.href = '/login';
     }
-    return response;
+    console.log('error', error)
+    return Promise.reject(error);
 });
 
 export default instance;

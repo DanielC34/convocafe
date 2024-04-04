@@ -41,6 +41,8 @@ messagesRouter.post('/messages', async (req, res) => {
 
         await message.save();
 
+        req.app.io.emit(`message/${chatId}`, message);
+
         res.json(message);
     } catch (error) {
         console.log(error);

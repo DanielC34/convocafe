@@ -9,7 +9,11 @@ const mustBeAuthenticated = (req, res, next) => {
     const jwtSecret = process.env.JWT_SECRET;
 
     jwt.verify(token, jwtSecret, (err, user) => {
-        if (err) return res.sendStatus(403); // token no longer valid
+        if (err) {
+            console.error(err);
+            return res.status(403).send({message: 'Token is no longer valid', invalidToken: true});
+        }
+
         req.user = user;
         next();
     });
