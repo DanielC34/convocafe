@@ -11,16 +11,21 @@ messagesRouter.get('/messages', async (req, res) => {
         return res.status(400).json({error: 'Chat ID is required'});
     }
 
-    let messages = await Message.find({chat: chatID}).populate('sender', 'username');
+    try {
+        let messages = await Message.find({chat: chatID}).populate('sender', 'username');
+        // Add the isOwner property to each message
+        messages = messages.map(message => {
+            message = message.toObject(); // Convert the message document to a plain JavaScript object
+            message.isOwner = String(message.sender.id) === req.user.id; // Add the isOwner property
+            return message;
+        });
 
-    // Add the isOwner property to each message
-    messages = messages.map(message => {
-        message = message.toObject(); // Convert the message document to a plain JavaScript object
-        message.isOwner = String(message.sender.id) === req.user.id; // Add the isOwner property
-        return message;
-    });
+        res.json(messages);
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({error: 'Error fetching messages'});
+    }
 
-    res.json(messages);
 });
 
 
@@ -70,9 +75,13 @@ messagesRouter.get('/chats', async (req, res) => {
         return res.status(400).json({error: 'User ID is required'});
     }
 
-    const chats = await Chat.find({participants: userId}).populate('participants', 'username');
-
-    res.json(chats);
+    try {
+        const chats = await Chat.find({participants: userId}).populate('participants', 'username');
+        res.json(chats);
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({error: 'Error fetching chats'});
+    }
 });
 
 

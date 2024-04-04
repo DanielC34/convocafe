@@ -11,6 +11,13 @@ export const useMessageStore = create((set, get) => ({
             return;
         }
 
+
+        set((state) => {
+            const newSubscribedChatIds = {...state.subscribedChatIds};
+            newSubscribedChatIds[chatId] = true;
+            return ({subscribedChatIds: {...newSubscribedChatIds}});
+        })
+
         try {
             const res = await axios.get(`/messages`, {
                 params: {
@@ -28,11 +35,13 @@ export const useMessageStore = create((set, get) => ({
             return;
         }
 
+
         useSocketStore.getState().socket.on(`message/${chatId}`, (message) => {
 
             if (message?.sender?.id === useAuthStore.getState().user.id) {
                 return;
             }
+
             set((state) => {
                 const newMessages = {...state.messages};
                 if (!newMessages[chatId]) {
@@ -44,11 +53,7 @@ export const useMessageStore = create((set, get) => ({
             })
         });
 
-        set((state) => {
-            const newSubscribedChatIds = {...state.subscribedChatIds};
-            newSubscribedChatIds[chatId] = true;
-            return ({subscribedChatIds: {...newSubscribedChatIds}});
-        })
+
     },
     sendMessage: async (message, chatId) => {
         try {
@@ -80,7 +85,8 @@ export const useChatStore = create((set, get) => ({
     chats: [],
     selectedChat: null,
     selectChat: (chatID) => set({selectedChat: chatID}),
-    findChat: (chatID) => {
+    findChat: async (chatID) => {
+        await get().fetchChats();
         return get().chats.find(chat => chat.id === chatID);
     },
     fetchChats: async () => {

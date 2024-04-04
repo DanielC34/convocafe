@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const mustBeAuthenticated = require("../middleware");
+const {Chat} = require("../models/chat");
 const userRouter = require('express').Router();
 
 userRouter.use(mustBeAuthenticated);
@@ -21,7 +22,16 @@ userRouter.get('/users/me', async (req, res) => {
 userRouter.get('/users', async (req, res) => {
     // Get all users apart from the current user
     try {
-        const users = await User.find({email: {$ne: req.user.email}});
+        let users = await User.find({email: {$ne: req.user.email}}).lean();
+
+        for (let user of users) {
+            user.id = user._id;
+            delete user._id;
+            delete user.__v;
+
+            const hasChat = await Chat.exists({participants: {$all: [req.user.id, user.id]}})
+            user.hasChat = !!hasChat;
+        }
 
         if (!users) {
             return res.status(404).send({msg: 'No users found'});

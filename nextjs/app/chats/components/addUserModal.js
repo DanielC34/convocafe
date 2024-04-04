@@ -1,8 +1,9 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import FilledButton from "@/components/buttons/filled-button";
 import {useUserStore} from "@/app/chats/stores/users";
 import {useRouter} from "next/navigation";
 import {useModalStore} from "@/app/chats/stores/modal";
+import {useChatStore} from "@/app/chats/stores/chats";
 
 const AddUserModal = ({onClose}) => {
     const fetchUsers = useUserStore(state => state.fetchUsers)
@@ -74,19 +75,17 @@ const AddUserListSkeleton = () => {
 
 }
 const AddUserList = ({users}) => {
-    const addUserToStore = useUserStore(state => state.addUser)
-    const setSelectedUserID = useUserSelectedStore(state => state.setUserID)
-    const closeModal = useModalStore(state => state.close)
-    const usersWithChat = useUserStore(state => state.userIDs)
-    const router = useRouter()
 
+    const closeModal = useModalStore(state => state.close)
+    const selectChat = useChatStore(state => state.selectChat)
+    const router = useRouter()
 
     function onChatClick(user) {
         // add user to chat
-        addUserToStore(user)
+        // addUserToStore(user)
 
         // set selected user id
-        setSelectedUserID(user.id)
+        selectChat(user.id)
 
         // navigate to chat page
         router.push(`/chats/${user.id}`)
@@ -98,7 +97,6 @@ const AddUserList = ({users}) => {
     return (
         <div className="mt-4">
             {users.map((user, index) => {
-                const alreadyChatting = usersWithChat[+user.id];
                 return (
                     <div
                         key={index}
@@ -106,7 +104,7 @@ const AddUserList = ({users}) => {
                             flex justify-between items-center
                             py-2
                             border-b
-                            ${alreadyChatting ? 'opacity-50 pointer-events-none' : ''}
+                            ${user.hasChat ? 'opacity-50 pointer-events-none' : ''}
                          `}
 
                             >
@@ -114,7 +112,7 @@ const AddUserList = ({users}) => {
                             <h3 className="text-lg">{user.username}</h3>
                             <p className="text-sm text-gray-500">{user.email}</p>
                         </div>
-                        {(!alreadyChatting && <FilledButton
+                        {(!user.hasChat && <FilledButton
                             dense
                             onClick={() => onChatClick(user)}
                         >Chat</FilledButton>)}
