@@ -4,8 +4,9 @@ import FormCard from "@/components/cards/formCard";
 import {useModalStore} from "@/app/chats/stores/modal";
 import {useEffect} from "react";
 import {useAuthStore} from "@/app/stores/auth";
+import {isAuth} from "@/utils/auth";
 
-export default function Page() {
+const ChatPage = () => {
     const openModal = useModalStore(state => state.open)
     const fetchCurrentUser = useAuthStore(state => state.fetchCurrentUser)
     useEffect(() => {
@@ -33,3 +34,6 @@ export default function Page() {
         </main>
     )
 }
+
+
+export default isAuth(ChatPage);

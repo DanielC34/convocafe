@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import FilledButton from "@/components/buttons/filled-button";
 import {useUserStore} from "@/app/chats/stores/users";
 import {useRouter} from "next/navigation";
@@ -11,7 +11,7 @@ const AddUserModal = ({onClose}) => {
     const loadingUsers = useUserStore(state => state.loading)
 
     useEffect(() => {
-         fetchUsers();
+        fetchUsers();
     }, []);
 
     const stopPropagation = (e) => {
@@ -78,20 +78,32 @@ const AddUserList = ({users}) => {
 
     const closeModal = useModalStore(state => state.close)
     const selectChat = useChatStore(state => state.selectChat)
+    const getOrCreateChat = useChatStore(state => state.getOrCreateChat)
+    const [loading, setLoading] = useState(false)
     const router = useRouter()
 
-    function onChatClick(user) {
-        // add user to chat
-        // addUserToStore(user)
+    async function onChatClick(user) {
+        setLoading(true)
 
-        // set selected user id
-        selectChat(user.id)
+        try {
+            // add user to chat
+            const chat = await getOrCreateChat(user.id)
+            if (!chat) return
 
-        // navigate to chat page
-        router.push(`/chats/${user.id}`)
+            // set selected user id
+            selectChat(chat.id)
+            setLoading(false)
+            // navigate to chat page
+            router.push(`/chats/${chat.id}`)
 
-        // close modal
-        closeModal()
+            // close modal
+            closeModal()
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setLoading(false)
+        }
+
     }
 
     return (
@@ -107,13 +119,14 @@ const AddUserList = ({users}) => {
                             ${user.hasChat ? 'opacity-50 pointer-events-none' : ''}
                          `}
 
-                            >
+                    >
                         <div>
                             <h3 className="text-lg">{user.username}</h3>
                             <p className="text-sm text-gray-500">{user.email}</p>
                         </div>
                         {(!user.hasChat && <FilledButton
                             dense
+                            isLoading={loading}
                             onClick={() => onChatClick(user)}
                         >Chat</FilledButton>)}
                     </div>

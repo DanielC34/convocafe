@@ -89,6 +89,23 @@ export const useChatStore = create((set, get) => ({
         await get().fetchChats();
         return get().chats.find(chat => chat.id === chatID);
     },
+
+    getOrCreateChat: async (recipientId) => {
+        const chat = get().chats.find(chat => chat.participants.find(user => user.id === recipientId));
+        if (chat) return chat;
+
+        try {
+            const res = await axios.post('/chats', {}, {params: {recipientId}});
+            const newChat = res.data;
+
+            set((state) => ({chats: [...state.chats, newChat]}));
+            return newChat;
+        } catch (e) {
+            console.log(e)
+        }
+
+    },
+
     fetchChats: async () => {
         try {
             set((state) => ({loading: true}));

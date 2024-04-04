@@ -86,7 +86,7 @@ messagesRouter.get('/chats', async (req, res) => {
 
 
 messagesRouter.post('/chats', async (req, res) => {
-    const {recipientId} = req.body;
+    const {recipientId} = req.query;
     const userId = req.user.id;
 
     if (!recipientId) {

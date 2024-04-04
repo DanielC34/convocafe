@@ -8,8 +8,9 @@ import {useEffect, useState} from "react";
 import MessagesListView from "@/app/chats/components/messageListView";
 import {useChatStore} from "@/app/chats/stores/chats";
 import {useAuthStore} from "@/app/stores/auth";
+import {isAuth} from "@/utils/auth";
 
-export default function Page({params}) {
+const ChatByIDPage = ({params}) => {
     const findChat = useChatStore(state => state.findChat)
     const selectChat = useChatStore(state => state.selectChat)
     const authUser = useAuthStore(state => state.user);
@@ -54,12 +55,7 @@ export default function Page({params}) {
                 flex justify-between items-center
             ">
                 <h2 className="text-2xl"> {recipient?.username}</h2>
-                <div className="
-                    flex justify-end items-center
-                    gap-2.5
-                ">
-                    <FilledButton>Logout</FilledButton>
-                </div>
+
             </div>
 
             <Divider/>
@@ -68,3 +64,5 @@ export default function Page({params}) {
         </>
     )
 }
+
+export default isAuth(ChatByIDPage);
