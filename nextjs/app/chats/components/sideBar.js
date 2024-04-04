@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import FilledButton from "@/components/buttons/filled-button";
-import UserList from "@/app/chats/components/userList";
 import {useModalStore} from "@/app/chats/stores/modal";
+import ChatListView from "@/app/chats/components/chatListView";
 
 const SideBar = () => {
     const openModal = useModalStore(state => state.open)
@@ -27,7 +27,7 @@ const SideBar = () => {
                     onClick={openModal}
                 >Add user</FilledButton>
             </div>
-            <UserList/>
+            <ChatListView/>
         </>
     );
 }

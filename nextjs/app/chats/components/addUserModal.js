@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import FilledButton from "@/components/buttons/filled-button";
-import {useUserSelectedStore, useUserStore} from "@/app/chats/stores/users";
+import {useUserStore} from "@/app/chats/stores/users";
 import {useRouter} from "next/navigation";
 import {useModalStore} from "@/app/chats/stores/modal";
 

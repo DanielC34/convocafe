@@ -6,13 +6,13 @@ import {useState} from "react";
 import {useMessageStore} from "@/app/chats/stores/chats";
 import {useSocketStore} from "@/app/stores/socket";
 
-const ChatTextInput = ({userID}) => {
+const ChatTextInput = ({chatId, receiverId}) => {
     const [message, setMessage] = useState('');
     const storedMessagesData = useMessageStore(state => state.messages);
     const addMessage = useMessageStore(state => state.addMessage);
     // const socket = useSocketStore(state => state.socket);
 
-    const storedMessages = storedMessagesData[userID] || [];
+    const storedMessages = storedMessagesData[chatId] || [];
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -23,7 +23,7 @@ const ChatTextInput = ({userID}) => {
             text: message.trim(),
             time: new Date().toLocaleTimeString(),
             isOwner: true,
-            receiverID: userID
+            receiverID: receiverId
         };
 
         // console.log("send-message: " , msg)

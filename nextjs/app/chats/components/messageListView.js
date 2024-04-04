@@ -3,10 +3,10 @@
 import ChatBubble from "@/app/chats/components/chatbubble";
 import {useMessageStore} from "@/app/chats/stores/chats";
 
-const ChatListView = ({userID}) => {
+const MessagesListView = ({chatId}) => {
     const messagesData = useMessageStore(state => state.messages);
 
-    const messages = messagesData[userID] || [];
+    const messages = messagesData[chatId] || [];
 
     return (
         <div className="
@@ -20,4 +20,4 @@ const ChatListView = ({userID}) => {
     )
 }
 
-export default ChatListView;
+export default MessagesListView;

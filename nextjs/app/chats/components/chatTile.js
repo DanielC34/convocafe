@@ -1,24 +1,26 @@
 'use client'
 
 import Image from "next/image";
-import {useMessageStore} from "@/app/chats/stores/chats";
+import {useChatStore} from "@/app/chats/stores/chats";
 import {useRouter} from "next/navigation";
-import {useUserSelectedStore} from "@/app/chats/stores/users";
+import {useAuthStore} from "@/app/stores/auth";
 
-const ChatUserTile = ({user}) => {
+const ChatTile = ({chat}) => {
     const router = useRouter();
-    // const selectedUserID = useMessageStore(state => state.selectedUserID);
-    const selectedId = useUserSelectedStore(state => state.userId);
-    const setSelectedUserID = useUserSelectedStore(state => state.setUserID);
 
-    const selected = selectedId === user.id;
-    const activeClass = selected ? "bg-[#F5F5DC]" : "";
-    // const activeClass = "bg-[#F5F5DC]";
+    const selectedChat = useChatStore(state => state.selectedChat);
+    const selectChat = useChatStore(state => state.selectChat);
 
-    async function handleClick(userID) {
-        setSelectedUserID(userID);
-        router.push(`/chats/${userID}`);
+    const authUser = useAuthStore(state => state.user);
+
+    const activeClass = selectedChat === chat.id ? "bg-[#F5F5DC]" : "";
+
+    async function handleClick(id) {
+        selectChat(id);
+        router.push(`/chats/${chat.id}`);
     }
+
+    const receiver = chat.participants.find((user) => user.id !== authUser?.id)
 
     return (
         <div
@@ -28,7 +30,7 @@ const ChatUserTile = ({user}) => {
                 active:bg-[#F5F5DC]
                 ${activeClass}
             `}
-            onClick={() => handleClick(user.id)}
+            onClick={() => handleClick(chat.id)}
         >
             <div className="p-3 bg-stone-200 rounded-full justify-center items-center flex">
                 <Image
@@ -45,10 +47,12 @@ const ChatUserTile = ({user}) => {
                     basis-0 text-stone-900 text-sm font-medium
                     leading-relaxed
                 ">
-                {user.username}
+                {
+                    receiver?.username
+                }
             </div>
         </div>
     )
 }
 
-export default ChatUserTile;
+export default ChatTile;

@@ -1,32 +1,37 @@
 'use client'
 
 import FilledButton from "@/components/buttons/filled-button";
-import ChatListView from "@/app/chats/components/chatList";
 import ChatTextInput from "@/app/chats/components/chatTextInput";
 import Divider from "@/components/divider";
-import {useUserSelectedStore, useUserStore} from "@/app/chats/stores/users";
 import {useParams, useRouter} from "next/navigation";
 import {useEffect} from "react";
-import {useMessageStore} from "@/app/chats/stores/chats";
+import MessagesListView from "@/app/chats/components/messageListView";
+import {useChatStore} from "@/app/chats/stores/chats";
+import {useAuthStore} from "@/app/stores/auth";
 
 export default function Page() {
     const router = useRouter();
     const params = useParams()
-    const storedUsers = useUserStore(state => state.users)
-    const setSelectedUser = useUserSelectedStore(state => state.setUserID)
-    const userID = params.user_id;
+    const findChat = useChatStore(state => state.findChat)
+    const selectChat = useChatStore(state => state.selectChat)
+    const authUser = useAuthStore(state => state.user);
+    const chatId = params.id;
 
-    const foundUser = storedUsers.find(user => `${user.id}` === userID);
+    const chat = findChat(chatId);
+    let receiver;
 
     useEffect(() => {
-        if (!foundUser) {
+        if (!chat) {
             router.push('/chats')
             return
         }
-        setSelectedUser(+userID)
-    }, [storedUsers, userID]);
+        selectChat(chatId)
 
-    if (!foundUser) {
+        if (authUser)
+            receiver = chat.participants.find((user) => user.id !== authUser?.id)
+    }, [authUser]);
+
+    if (!chat) {
         return null
     }
 
@@ -36,7 +41,7 @@ export default function Page() {
                 w-full py-1
                 flex justify-between items-center
             ">
-                <h2 className="text-2xl"> {foundUser.username}</h2>
+                <h2 className="text-2xl"> {receiver?.username}</h2>
                 <div className="
                     flex justify-end items-center
                     gap-2.5
@@ -46,8 +51,8 @@ export default function Page() {
             </div>
 
             <Divider/>
-            <ChatListView userID={userID}/>
-            <ChatTextInput userID={userID}/>
+            <MessagesListView chatId={chatId}/>
+            <ChatTextInput chatId={chatId} receiverId={receiver?.id}/>
         </>
     )
 }

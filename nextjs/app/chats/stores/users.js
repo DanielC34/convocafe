@@ -43,8 +43,3 @@ export const useUserStore = create((set) => ({
 }));
 
 
-export const useUserSelectedStore = create((set) => ({
-    userId: 0,
-    setUserID: (userID) => set({userId: userID}),
-}));
-
