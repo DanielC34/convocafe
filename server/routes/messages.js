@@ -85,6 +85,24 @@ messagesRouter.get('/chats', async (req, res) => {
 });
 
 
+messagesRouter.post('/chats', async (req, res) => {
+    const {recipientId} = req.body;
+    const userId = req.user.id;
+
+    if (!recipientId) {
+        return res.status(400).json({error: 'Recipient ID is required'});
+    }
+
+    try {
+        const chat = await findByRecipientsOrSave([userId, recipientId]);
+        res.json(chat);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: 'Error saving chat'});
+    }
+});
+
+
 module.exports = messagesRouter;
 
 
