@@ -33,7 +33,7 @@ const SignupPage = () => {
                 return
             }
             console.log("sending request")
-            const res = await axios.post('/signup', {email, password, username})
+            const res = await axios.post('/auth/signup', {email, password, username})
             console.log("done sending request")
             if (res.status === 201) {
                 router.push('/login')

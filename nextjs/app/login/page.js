@@ -22,7 +22,7 @@ const loginPage = () => {
         setError(null)
 
         try {
-            const res = await axios.post('/login', {email, password})
+            const res = await axios.post('/auth/login', {email, password})
             if (res.status === 200) {
                 console.log(res.data)
                 localStorage.setItem('token', res.data.token)

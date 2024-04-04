@@ -5,17 +5,12 @@ import {useRouter} from "next/navigation";
 import {useModalStore} from "@/app/chats/stores/modal";
 
 const AddUserModal = ({onClose}) => {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(false);
-    // fetch users from the server
+    const fetchUsers = useUserStore(state => state.fetchUsers)
+    const users = useUserStore(state => state.users)
+    const loadingUsers = useUserStore(state => state.loading)
 
     useEffect(() => {
-        setLoading(true)
-        fetchUsers().then(data => {
-            setUsers(data);
-        }).finally(() => {
-            setLoading(false)
-        });
+         fetchUsers();
     }, []);
 
     const stopPropagation = (e) => {
@@ -42,7 +37,7 @@ const AddUserModal = ({onClose}) => {
                 onClick={stopPropagation}
             >
                 <h2 className="text-xl font-semibold">Add User</h2>
-                {loading ? <AddUserListSkeleton/> : <AddUserList users={users}/>}
+                {loadingUsers ? <AddUserListSkeleton/> : <AddUserList users={users}/>}
                 <div className="mt-4 flex justify-end items-center gap-4">
                     <FilledButton
                         dense
@@ -128,63 +123,4 @@ const AddUserList = ({users}) => {
             })}
         </div>
     )
-}
-
-
-async function fetchUsers() {
-    // sleep for 2 seconds
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    return [
-        {
-            id: 1,
-            username: "Paul George",
-            email: "paul@gmail.com"
-        },
-        {
-            id: 2,
-            username: "John Doe",
-            email: "johndoe@gmail.com"
-        },
-        {
-            id: 3,
-            username: "Jane Doe",
-            email: "janedoe@gmail.com"
-        },
-        {
-            id: 4,
-            username: "John Paul",
-            email: "johnpaul@gmail.com"
-        },
-        {
-            id: 5,
-            username: "Jane Paul",
-            email: "janepaul@gmail.com"
-        },
-        {
-            id: 6,
-            username: "Paul Collins",
-            email: "paulcollins@gmail.com"
-        },
-        {
-            id: 7,
-            username: "John Collins",
-            email: "johncollins@gmail.com"
-        },
-        {
-            id: 8,
-            username: "Jane Collins",
-            email: "janecollins@gmail.com"
-        },
-        {
-            id: 9,
-            username: "John Paul",
-            email: "johncollins@gmail.com"
-        },
-        {
-            id: 10,
-            username: "Jane Paul",
-            email: "janecollins@gmail.com"
-        },
-    ]
 }
