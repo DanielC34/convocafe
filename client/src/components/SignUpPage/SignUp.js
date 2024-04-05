@@ -7,6 +7,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  //const [picture, setPicture] = useState();
 
   const handleSignup = (e) => {
     // Logic to handle Signup form
