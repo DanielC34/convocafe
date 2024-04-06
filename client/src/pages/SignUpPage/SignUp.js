@@ -1,16 +1,77 @@
 import React, { useState } from "react";
 import "./SignUp.css";
-import { Link } from 'react-router-dom'
+import axios from "axios";
+import { toast } from 'react-toastify';
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+  const handleClick = () => setShow(!show);
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  //const [picture, setPicture] = useState();
+  //const [picture, setPicture] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     // Logic to handle Signup form
+    e.preventDefault();
+    setLoading(true);
+    if (!username || !email || !password || !confirmPassword) {
+      toast({
+        title: "Warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+    // Handle case where password does not match confirmPassword
+    if (password !== confirmPassword) {
+      toast.warning("Passwords do not match. Try again")
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post("/api/users", {
+        username,
+        email,
+        password
+      }, config);
+      
+      toast({
+        title: "Registration Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom"
+      });
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      navigate.push("/chats")
+    } catch (error) {
+      toast({
+        title: "Error Occured!!",
+        status: "error",
+        description: error.response.data.message,
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+
   };
 
   return (
