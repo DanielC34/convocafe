@@ -1,7 +1,9 @@
 import React from "react";
 import "./LandingPage.css";
 import { Link } from "react-router-dom";
-import Coffee from "../../components/img/coffee1.png"; 
+import Coffee from "../img/coffee1.png"; 
+
+
 
 const LandingPage = () => {
   return (
