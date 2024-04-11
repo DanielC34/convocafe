@@ -8,39 +8,59 @@ const { v4: uuidv4 } = require('uuid');
 
 //Define the user schema
 const userSchema = new mongoose.Schema({
-    name: { type: String, required: true, trim: true, maxLength:30, minLength: 2, },
-    email: { type: String, required: true, unique: true },
-    encrypted_password: { type: String, required: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      maxLength: 30,
+      minLength: 2,
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
+    },
+    encrypted_password: {
+      type: String,
+      required: true,
+    },
     salt: String,
-},
-    { timestamps: true } // Automatically adds createdAt and updatedAt fields
+  },
+  { timestamps: true }
 );
-//Creates virtual field "password" to handle encryption
-userSchema.virtual("password").set((password) => {
+//Creating a "virtual" field that will take in password and encrypt it
+userSchema
+  .virtual("password")
+  .set(function (password) {
     this._password = password;
     this.salt = uuidv4();
-    this.encrypted_password = this.securePassword(password);
-}).get(() => {
+    this.encrypted_password = this.securedPassword(password);
+  })
+  .get(function () {
     return this._password;
-});
-
-//Define methods associated with the user schema
+  });
+//Defining some methods associated with user schema
 userSchema.method({
-    //Checks if the password is correct
-    authenticate: (plainpassword) => {
-        return this.securedPassword(plainpassword) === this.encrypted_password;
-    },
-    //Encrypt the password
-    securedPassword: (plainpassword) => {
-        if (!plainpassword)
-            return "";
-        try {
-            return crypto.createHmac('sha256', this.salt).update(plainpassword).digest("hex");
-        } catch (err) {
-            return "Error in hashing password"
-        }
+  //To check if the password is correct
+  authenticate: function (plainpassword) {
+    return this.securedPassword(plainpassword) === this.encrypted_password;
+  },
+
+  //To encrypt the password
+  securedPassword: function (plainpassword) {
+    if (!plainpassword) return "";
+    try {
+      return crypto
+        .createHmac("sha256", this.salt)
+        .update(plainpassword)
+        .digest("hex");
+    } catch (err) {
+      return "Error in hashing the password";
     }
-});
+  },
+})
+
 
 //Creates a User model based on the schema
 const User = mongoose.model("User", userSchema);

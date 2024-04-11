@@ -1,132 +1,149 @@
 import React, { useState } from "react";
 import "./SignUp.css";
-import axios from "axios";
-import { toast } from 'react-toastify';
-import { Link, useNavigate } from "react-router-dom";
+import { signup } from '../../backend';
 
 const Signup = () => {
-  const [show, setShow] = useState(false);
-  const navigate = useNavigate();
-  const handleClick = () => setShow(!show);
+    const [formValues, setFormValues] = useState({
+      email: "",
+      name: "",
+      password: "",
+      error: "",
+      loading: false,
+      success: false,
+    });
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  //const [picture, setPicture] = useState("");
-  const [loading, setLoading] = useState(false);
+    // Destructuring values from the state
+    const { name, email, password, error, loading, success } = formValues;
 
-  const handleSignup = async (e) => {
-    // Logic to handle Signup form
-    e.preventDefault();
-    setLoading(true);
-    if (!username || !email || !password || !confirmPassword) {
-      toast({
-        title: "Warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
+    // Handles changes in the input fields
+    const handleChange = (name) => (event) => {
+      setFormValues({
+        ...formValues,
+        error: false,
+        [name]: event.target.value,
       });
-      setLoading(false);
-      return;
-    }
-    // Handle case where password does not match confirmPassword
-    if (password !== confirmPassword) {
-      toast.warning("Passwords do not match. Try again")
-      setLoading(false);
-      return;
-    }
+    };
 
-    try {
+    // Submits the form data to the backend
+    const onSubmit = async (event) => {
+      event.preventDefault();
+      setFormValues({ ...formValues, success: false, loading: true });
 
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
+      // Placeholder for the signup function calling the backend
+      signup({ name, email, password })
+        .then((data) => {
+          if (data.error) {
+            setFormValues({
+              ...formValues,
+              error: data.error,
+              loading: false,
+              success: false,
+            });
+          } else {
+            setFormValues({ ...formValues, success: true });
+          }
+        })
+        .catch();
+    };
 
-      const { data } = await axios.post(
-        "http://localhost:3001/api/user",
-        {
-          username,
-          email,
-          password,
-        },
-        config
-      );
-      
-      toast({
-        title: "Registration Successful",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom"
-      });
-
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      navigate.push("/chats")
-    } catch (error) {
-      toast({
-        title: "Error Occured!!",
-        status: "error",
-        description: error.response.data.message,
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setLoading(false);
-    }
-
-  };
-
-  return (
-    <div className="form-box">
-      <form className="form" onSubmit={handleSignup}>
-        <span className="title">Sign up</span>
-        <span className="subtitle">Create a free account with your email.</span>
-        <div className="form-container">
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            className="input"
-            required
-          />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="input"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="input"
-            required
-          />
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm Password"
-            className="input"
-            required
-          />
+    // Displays error message if there's any
+    const errorMessage = () => {
+      return (
+        <div
+          className="error-message"
+          style={{ display: error ? "" : "none", color: "red" }}
+        >
+          {error}
         </div>
-        <button type="submit" className="signup-button">Sign up</button>
-      </form>
-      <div className="form-section">
-        <p>
-          Have an account? <Link to="/login">Log in</Link>{" "}
-        </p>
+      );
+    };
+
+    // Displays loading message during form submission
+    const loadingMessage = () => {
+      return (
+        loading && (
+          <div
+            className="loading-message"
+            style={{ display: error ? "" : "none", color: "red" }}
+          >
+            <div className="loading-spinner"></div>
+            <p>Loading...</p>
+          </div>
+        )
+      );
+    };
+
+    // Displays success message upon successful form submission
+    const successMessage = () => {
+      return (
+        success && (
+          <div>
+            <center>
+              <p className="login_redirect mt-2">
+                Account created successfully{" "}
+                <b>
+                  <a href="/signin">Login here</a>
+                </b>
+              </p>
+            </center>
+          </div>
+        )
+      );
+    };
+
+    return (
+      <div className="form-container">
+        <div className="form-box">
+          <h2>Create an account</h2>
+          {errorMessage()}
+          {loadingMessage()}
+          {successMessage()}
+          <div className="form-group">
+            <label htmlFor="name">Username</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              onChange={handleChange("name")}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              onChange={handleChange("email")}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              onChange={handleChange("password")}
+              required
+            />
+          </div>
+          <div className="form-group-button">
+            <button onClick={onSubmit}>Signup</button>
+          </div>
+          <div className="login-message">
+            <center>
+              <p className="login_redirect mt-2">
+                Already have an account?
+                <b>
+                  <a href="/signin"> Login here</a>
+                </b>
+              </p>
+            </center>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default Signup;

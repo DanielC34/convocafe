@@ -1,16 +1,19 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const app = express();
-const connectDB = require("./config/database");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/authRoutes");
 
-dotenv.config();
+require("dotenv").config();
 
-//Database connection in database.js
-connectDB();
+//Database connection 
+mongoose
+  .connect(process.env.MONGODB_URL)
+  .then(() => console.log("Database connected successfully"))
+  .catch((err) => console.log("Database connection failed", err));
 
 // Starting the app server
 const PORT = process.env.PORT;

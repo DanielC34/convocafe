@@ -1,75 +1,85 @@
+// Importing necessary modules and models
 const User = require("../models/userModel");
 const { check, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
+const jwtToken = require("jsonwebtoken");
+const { expressjwt: jwt } = require("express-jwt");
 
-//Validating user input using express-validator middleware
-const validateInput = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ error: errors.array()[0].msg });
-    }
-    next();
- }
-
-
-//Registering a new user
-exports.signup = async (req, res) => {
-    try {
-
-        const user = await User.create(req.body);
-        res.json({
-            id: user._id, name: user._name, email: user._email
-        })
-    } catch (err) {
-        let errorMessage = "Error creating user";
-        if (err.code === 11000) {
-            errorMessage = "User already exists, please sign in";
-        }
-        return res.status(500).json({ error: errorMessage })
-    }
+// SIGNUP: Registering a new user
+exports.signup = (req, res) => {
+  // Validate user input using express-validator
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      error: errors.array()[0].msg,
+    });
+  }
+  // Creating a new user instance and saving it to the database
+  const user = new User(req.body);
+  user
+    .save()
+    .then((user) => {
+      res.json({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+    })
+    .catch((err) => {
+      let errorMessage = "Something went wrong.";
+      if (err.code === 11000) {
+        errorMessage = "User already exists, please signin";
+      }
+      return res.status(500).json({ error: errorMessage });
+    });
 };
-
-//Authentication of existing user
+// SIGNIN: Authenticating existing user
 exports.signin = async (req, res) => {
-    try {
-        const { email: userEmail, password } = req.body;
-        const user = await User.findOne({ email: userEmail });
-        if (!user || !user.authenticate(password)) {
-            return res.status(401).json({ error: "Incorrect email or password. Please check them both" });
-        }
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-        res.cookie("token", token, { expire: new Date() + 9999 });
-        const { _id, name, email } = user;
-        res.json({ token, user: { _id, name, email } });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Server Error" });
+  // Validate user input using express-validator
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      error: errors.array()[0].msg,
+    });
+  }
+  // Checking user credentials and generating JWT token for authentication
+  const { email, password } = req.body;
+  await User.findOne({ email: `${email}` }).then((user) => {
+    if (!user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
     }
+    if (!user.authenticate(password)) {
+      return res.status(401).json({
+        error: "Email or Password does not exist",
+      });
+    }
+    // Setting JWT token as a cookie in the browser
+    const token = jwtToken.sign({ _id: user._id }, process.env.JWT_SECRET);
+    res.cookie("token", token, { expire: new Date() + 9999 });
+    const { _id, name, email } = user;
+    return res.json({ token, user: { _id, name, email } });
+  });
 };
-
-//Clearing the user token
+// SIGNOUT: Clearing user token
 exports.signout = (req, res) => {
-    res.clearCookie("token");
-    res.json({ message: "User has signed out" });
+  res.clearCookie("token");
+  res.json({
+    message: "User has signed out",
+  });
 };
-
-//Middleware to check if user is signed in
-exports.isSignedIn = (req, res, next) => {
-    try {
-        const token = req.cookies.token;
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (err) {
-        res.status(401).json({ error: "Unauthorized user!!" });
-    }
-};
-
-//Middleware to check if user is authenticated
+// Protected Routes
+exports.isSignedIn = jwt({
+  secret: "{`process.env.JWT_SECRET`}",
+  userProperty: "auth",
+  algorithms: ["HS256"],
+});
 exports.isAuthenticated = (req, res, next) => {
-    const isSameUser = req.profile && req.user && req.profile._id.toString() === req.user._id;
-    if (!isSameUser) {
-        return res.status(403).json({ error: "Access Denied!!" });
-    }
-    next();
-}
+  let checker = req.profile && req.auth && req.profile._id == req.auth._id;
+  if (!checker) {
+    return res.status(403).json({
+      error: "ACCESS DENIED",
+    });
+  }
+  next();
+};
