@@ -1,6 +1,8 @@
 import React from "react";
 import "./ChatPage.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import Navbar from "../../components/Navbar/Navbar";
+import ChatBox from "../../components/ChatBox/ChatBox";
 import { isAuthenticated, signout } from "../../backend";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +26,9 @@ const Chat = () => {
       </div>
       <div className="chat-window">
         {/*Chat window content goes here*/}
-        <h1>Chat Window, {authenticatedUser.user.name}</h1>
+        <Navbar />
+          <h1>Chat Window, {authenticatedUser.user.name}</h1>
+          <ChatBox />
       </div>
       <button className="signout-button" onClick={onSignout}>
         Sign Out
@@ -33,4 +37,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default Chat ;
