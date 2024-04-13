@@ -1,5 +1,6 @@
 import React from "react";
 import "./ChatPage.css";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import { isAuthenticated, signout } from "../../backend";
 import { useNavigate } from "react-router-dom";
 
@@ -17,9 +18,17 @@ const Chat = () => {
   return !authenticatedUser ? (
     <h1>Please sign in</h1>
   ) : (
-    <div className="dashboard">
-      <button onClick={onSignout}>Sign Out</button>
-      <h1>Hello, {authenticatedUser.user.name}</h1>
+    <div className="chat-page">
+      <div className="sidebar-content">
+        <Sidebar /> {/*Sidebar content goes here*/}
+      </div>
+      <div className="chat-window">
+        {/*Chat window content goes here*/}
+        <h1>Chat Window, {authenticatedUser.user.name}</h1>
+      </div>
+      <button className="signout-button" onClick={onSignout}>
+        Sign Out
+      </button>
     </div>
   );
 };

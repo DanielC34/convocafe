@@ -101,7 +101,7 @@ const Login = () => {
           />
         </div>
         <div className="form-group-button">
-          <button onClick={onSubmit}>Log in</button>
+          <button className='login-button' onClick={onSubmit}>Log in</button>
         </div>
         <div className="login-message">
           <center>

@@ -1,9 +1,9 @@
 import React from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
-import LandingPage from "./components/LandingPage/LandingPage";
-import Login from "./components/LogInPage/Login";
-import Signup from "./components/SignUpPage/SignUp";
-import ChatPage from "./components/ChatPage/ChatPage";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import Login from "./pages/LogInPage/Login";
+import Signup from "./pages/SignUpPage/SignUp";
+import ChatPage from "./pages/ChatPage/ChatPage";
 
 const App = () => {
   return (

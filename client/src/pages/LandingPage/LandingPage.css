@@ -10,10 +10,14 @@
 }
 
 .buttons-container {
-  margin-top: 20px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
-.buttons-container button {
-  margin-right: 10px;
+.signup-button, .login-button {
   margin-bottom: 20px;
 }

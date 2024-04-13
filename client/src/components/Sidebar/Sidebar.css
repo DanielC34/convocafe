@@ -1,0 +1,21 @@
+.sidebar {
+    width: 300px;
+    height: 100%;
+    background-color: #f0f2f5;
+    border-right: 1px solid #dadce0;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #dadce0;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.sidebar-chats {
+    padding: 20px;
+}
