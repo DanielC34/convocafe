@@ -59,26 +59,6 @@ input {
     padding: 20px;
 }
 
-.signout-button {
-    background-color: #007bff;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px 10px;
-    font-size: 14px;
-    width: 80px;
-}
-
-.signout-button:hover {
-    background-color: #0056b3;
-}
-
 .error-message {
     margin-bottom: 1.5rem;
     text-align: center;
