@@ -1,5 +1,6 @@
 import React from 'react';
 import './Sidebar.css'
+import ChatList from '../ChatList/ChatList';
 import Searchbar from '../../components/SearchBar/SearchBar';
 
 const Sidebar = () => {
@@ -18,6 +19,7 @@ const Sidebar = () => {
       <div className="sidebar-chats">
         {/*Function to render list of chats and contacts */}
         {/* Each chat or contact item should be separate comment */}
+        <ChatList />
       </div>
     </div>
   );

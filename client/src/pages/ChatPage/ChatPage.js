@@ -2,11 +2,18 @@ import React from "react";
 import "./ChatPage.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
-import ChatBox from "../../components/ChatBox/ChatBox";
 import { isAuthenticated } from "../../backend";
+import InputBox from "../../components/InputBox/InputBox";
+import ChatBox from "../../components/ChatBox/ChatBox";
+
 
 const Chat = () => {
   const authenticatedUser = isAuthenticated(); // Check if the user is authenticated
+
+  const messages = [
+    { text: "Hello there", sender: "me" },
+    { text: "Hi! How can i help you?", sender: "other" },
+  ];
 
   return !authenticatedUser ? (
     <h1>Please sign in</h1>
@@ -19,8 +26,9 @@ const Chat = () => {
         {/*Chat window content goes here*/}
           <Navbar />
           <h1>Chat Window, {authenticatedUser.user.name}</h1>
-          <ChatBox />
-        </div>
+          <ChatBox messages={messages} />
+          <InputBox />
+      </div>
     </div>
   );
 };

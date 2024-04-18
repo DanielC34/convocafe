@@ -1,38 +1,14 @@
-import React, { useState } from 'react'
-import './ChatBox.css'
+import React from 'react'
+import MessageBubble from '../MessageBubble/MessageBubble'
 
-const ChatBox = ({ sendMessage }) => {
-    const [message, setMessage] = useState('');
-
-    const handleChange = (e) => {
-        setMessage(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (message.trim() !== '') {
-            sendMessage(message);
-            setMessage('');
-        }
-    };
-  
-  
-    return (
-      <form className="chat-box" onSubmit={handleSubmit}>
-        <div className="input-container">
-          <input
-            type="text"
-            placeholder="Type a message here..."
-            value={message}
-            onChange={handleChange}
-            className="message-input"
-          />
-          <button type="submit" className="send-btn">
-            Send
-          </button>
-        </div>
-      </form>
-    );
+const ChatBox = ({ messages }) => {
+  return (
+    <div className='chat-box'>
+      {messages.map((message, index) => (
+        <MessageBubble key={index} text={message.text} sender={message.sender} />
+        ))}
+    </div>
+  )
 }
 
 export default ChatBox
