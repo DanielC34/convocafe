@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import './SearchBar.css'
+import Coffee from '../../pages/img/coffee1.png'
+import Button from "@mui/material/Button";
+import { createTheme, ThemeProvider } from '@mui/material';
+
 
 const SearchBar = ({ onSearch }) => {
 
@@ -14,16 +18,37 @@ const SearchBar = ({ onSearch }) => {
         onSearch(searchText)
     };
 
+    const theme = createTheme({
+      palette: {
+        primary: {
+          main: "#000000",
+        },
+      },
+    });
+
     return (
-        <form className='search-bar' onSubmit={handleSubmit}>
-            <input
-                type="text"
-                value={searchText}
-                onChange={handleChange}
-                placeholder='Search name...'
-            />
-            <button type='submit'>Search</button>
-        </form>
+      <ThemeProvider theme={theme}>
+        <div className="search-bar">
+          <form onSubmit={handleSubmit}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={Coffee}
+                alt="Coffee"
+                style={{ width: "40px", marginRight: "50px" }}
+              />
+              <Button
+                variant="contained"
+                color="primary" 
+                type="submit"
+                size="small"
+                sx={{ marginLeft: "auto" }}
+              >
+                + Add User
+              </Button>
+            </div>
+          </form>
+        </div>
+      </ThemeProvider>
     );
 }
 

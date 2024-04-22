@@ -2,7 +2,7 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    width: calc(100% - 330px);
+    width: calc(100% - 340px);
     background: #f0f0f0;
     padding: 15px;
     border-top: 1px solid #ccc;
@@ -24,16 +24,3 @@
     outline: none;
 }
 
-.send-btn {
-    background-color: #128c7e;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-.send-btn:hover {
-    background-color: #0d6d5f;
-}

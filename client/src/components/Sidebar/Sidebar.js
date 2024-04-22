@@ -13,7 +13,6 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2>Chats</h2>
         <Searchbar onSearch={handleSearch} />
       </div>
       <div className="sidebar-chats">

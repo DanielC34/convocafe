@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './InputBox.css'
+import Send from '../../pages/img/Send.png'
 
 const InputBox = ({ sendMessage }) => {
     const [message, setMessage] = useState('');
@@ -27,9 +28,11 @@ const InputBox = ({ sendMessage }) => {
             onChange={handleChange}
             className="message-input"
           />
-          <button type="submit" className="send-btn">
-            Send
-          </button>
+          <img
+            src={Send}
+            alt="Send"
+            style={{ width: "30px", cursor: "pointer", marginRight: "2px" }}
+          />
         </div>
       </form>
     );

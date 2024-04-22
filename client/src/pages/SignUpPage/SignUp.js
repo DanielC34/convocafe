@@ -98,6 +98,7 @@ const Signup = () => {
           {errorMessage()}
           {loadingMessage()}
           {successMessage()}
+          <form>
           <div className="form-group">
             <label htmlFor="name">Username</label>
             <input
@@ -130,7 +131,8 @@ const Signup = () => {
           </div>
           <div className="form-group-button">
             <button className="signup-button" onClick={onSubmit}>Signup</button>
-          </div>
+            </div>
+          </form>
           <div className="login-message">
             <center>
               <p className="login_redirect mt-2">

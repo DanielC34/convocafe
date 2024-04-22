@@ -1,16 +1,22 @@
 .message-bubble {
-    max-width: 80%;
+    max-width: 70%;
     margin: 10px;
     padding: 10px;
     border-radius: 10px;
+    clear: both;
+    overflow-wrap: break-word;
+}
+
+.message-bubble p {
+    margin: 0;
 }
 
 .sent {
-    background-color: #DCF8C6;
-    align-self: flex-end;
+    background-color: #dcf8c6;
+    float: right;
 }
 
 .received {
     background-color: #E0E0E0;
-    align-self: flex-start;
+    float: left;
 }

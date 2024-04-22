@@ -1,6 +1,9 @@
 import React from 'react'
 import './Navbar.css'
 import { signout } from "../../backend";
+// import Button from "@mui/material/Button";
+import Logout from '../../pages/img/Logout.png'
+import Option from '../../pages/img/Option.png'
 import { useNavigate } from "react-router-dom";
 
 
@@ -19,11 +22,13 @@ const Navbar = () => {
         <span className="brand-text">ConvoCafe</span>
       </div>
       <div className="nav-links">
-        <button className="nav-btn-group">Create Group</button>
-        <button className="nav-btn-profile">Profile</button>
-        <button className="nav-btn-signout" onClick={onSignout}>
-          Sign Out
-        </button>
+        <img src={Option} alt="Option" style={{ width: "30px", cursor: "pointer", marginRight: "20px" }} />
+        <img
+          src={Logout}
+          alt="Logout"
+          style={{ width: "30px", cursor: "pointer" }}
+          onClick={onSignout}
+        />
       </div>
     </nav>
   );

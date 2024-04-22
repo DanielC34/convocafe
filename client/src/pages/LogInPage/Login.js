@@ -77,7 +77,8 @@ const Login = () => {
       <div className="form-box">
         <h2>Login</h2>
         {loadingMessage()}
-        {errorMessage()}
+          {errorMessage()}
+          <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -102,7 +103,8 @@ const Login = () => {
         </div>
         <div className="form-group-button">
           <button className='login-button' onClick={onSubmit}>Log in</button>
-        </div>
+          </div>
+          </form>
         <div className="login-message">
           <center>
             <p className="login_redirect mt-2">
