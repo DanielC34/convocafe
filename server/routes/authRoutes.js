@@ -1,35 +1,30 @@
-// const express = require("express");
-// const router = express.Router();
-// const bcrypt = require("bcrypt");
-// const User = require("../models/userModel");
+const express = require("express");
+const router = express.Router();
+const { check } = require("express-validator");
+const { signin, signup, signout,isSignedIn } = require("../controllers/authController");
 
-// //Route for handling Sign up requests
-// router.post("/signup", async (req, res) => {
-//     const { username, email, password, confirmPassword } = req.body;
 
-//     try {
-//         //Check if user already exists
-//         let existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             return res.status(400).json({ message: "User already exists" });
-//         }
+// //Route for handling user sign up
+router.post("/signup", [
+    check("name", "Name must be 3 or more characters long").isLength({ min: 3 }),
+    check("email", "Email is required").isEmail(),
+    check("password", "Password must have 8 or more characters").isLength({ min: 8 }),
+], signup);
 
-//         //Hash out the password
-//         const hashedPassword = await bcrypt.hash(password, 10);
+// Route for user sign in
+router.post("/signin", [
+  check("email", "Email is required").isEmail(),
+  check("password", "Password is required").isLength({
+    min: 1,
+  }),
+], signin);
 
-//         //Create a new user
-//         const newUser = new User({
-//             username,
-//             email,
-//             password: hashedPassword,
-//         });
-//         await newUser.save();
+//Route for user signout
+router.get("/signout", signout);
 
-//         res.status(201).json({ message: "User created successfully" });
-//     } catch (error) {
-//         console.error("Error creating user", error);
-//         res.status(500).json({ message: "Internal Server Error" });
-//     }
-// });
+//Protected Route for testing
+router.get("/testroute", isSignedIn, (req, res) => {
+    res.send("This is a protected route")
+});
 
-// module.exports = router;
+ module.exports = router;

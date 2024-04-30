@@ -1,0 +1,26 @@
+.input-box {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - 340px);
+    background: #f0f0f0;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 25px;
+    padding: 5px
+}
+
+.message-input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+

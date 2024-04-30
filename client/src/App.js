@@ -1,13 +1,24 @@
-import React from 'react';
-import AppRoutes from './routes/appRoutes';
+import React from "react";
+import './index.css'
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import Login from "./pages/LogInPage/Login";
+import Signup from "./pages/SignUpPage/SignUp";
+import ChatPage from "./pages/ChatPage/ChatPage";
 
-
-function App() {
+const App = () => {
   return (
-      <div className="App">
-          <AppRoutes />
-      </div>
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<LandingPage />} />
+          <Route exact path="/signin" element={<Login />} />
+          <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/chats" element={<ChatPage />} />
+        </Routes>
+      </Router>
+    </div>
   );
-}
+};
 
 export default App;
