@@ -1,8 +1,11 @@
 import React from "react";
 import "./ChatList.css";
+import { useChatContext } from "../ChatContext";
 import ProfilePic from '../../pages/img/ProfilePic.png'
 
 const ChatList = () => {
+
+  const { handleChatClick } = useChatContext();
   const chats = [
     { id: 1, name: "Johnny Cage", lastMessage: "Hey man!!", unreadCount: 2 },
     {
@@ -59,7 +62,7 @@ const ChatList = () => {
     <div className="chats-list">
       <ul className="chat-list">
         {chats.map((chat) => (
-          <li key={chat.id} className={chat.unreadCount > 0 ? "unread" : ""}>
+          <li key={chat.id} className={chat.unreadCount > 0 ? "unread" : ""} onClick={() => handleChatClick(chat.name)}>
             {/* Profile Picture */}
             <div className="profile-picture">
               <img src={ProfilePic} alt="ProfPic" />

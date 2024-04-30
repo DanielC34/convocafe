@@ -43,7 +43,7 @@ const SearchBar = ({ onSearch }) => {
                 size="small"
                 sx={{ marginLeft: "auto" }}
               >
-                + Add User
+                + New Chat
               </Button>
             </div>
           </form>

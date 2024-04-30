@@ -4,23 +4,18 @@
 // //be it one user or a group of users
 
 
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-// //Define the message Schema
-// const messageSchema = mongoose.Schema(
-//   {
-//     sender: { type: mongoose.Schema.ObjectId.Types.ObjectId, ref: "User" },
-//     content: { type: String, trim: true },
-//     chat: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Chat",
-//     },
-//   },
-//   { timestamps: true } // Automatically adds the time when the message was sent
-// );
+const messageSchema = new mongoose.Schema(
+  {
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    content: { type: String, trim: true },
+    chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
+    readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  },
+  { timestamps: true }
+);
 
-// // Creates model for messages
-// const Message = mongoose.model("Message", messageSchema);
+const Message = mongoose.model("Message", messageSchema);
 
-// //exports the message model created
-// module.exports = Message;
+module.exports = Message;

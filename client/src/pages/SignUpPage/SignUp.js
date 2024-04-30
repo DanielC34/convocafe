@@ -1,104 +1,104 @@
 import React, { useState } from "react";
 import "./SignUp.css";
-import { signup } from '../../backend';
+import { signup } from "../../auth";
 
 const Signup = () => {
-    const [formValues, setFormValues] = useState({
-      email: "",
-      name: "",
-      password: "",
-      error: "",
-      loading: false,
-      success: false,
+  const [formValues, setFormValues] = useState({
+    email: "",
+    name: "",
+    password: "",
+    error: "",
+    loading: false,
+    success: false,
+  });
+
+  // Destructuring values from the state
+  const { name, email, password, error, loading, success } = formValues;
+
+  // Handles changes in the input fields
+  const handleChange = (name) => (event) => {
+    setFormValues({
+      ...formValues,
+      error: false,
+      [name]: event.target.value,
     });
+  };
 
-    // Destructuring values from the state
-    const { name, email, password, error, loading, success } = formValues;
+  // Submits the form data to the backend
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setFormValues({ ...formValues, success: false, loading: true });
 
-    // Handles changes in the input fields
-    const handleChange = (name) => (event) => {
-      setFormValues({
-        ...formValues,
-        error: false,
-        [name]: event.target.value,
-      });
-    };
+    // Placeholder for the signup function calling the backend
+    signup({ name, email, password })
+      .then((data) => {
+        if (data.error) {
+          setFormValues({
+            ...formValues,
+            error: data.error,
+            loading: false,
+            success: false,
+          });
+        } else {
+          setFormValues({ ...formValues, success: true });
+        }
+      })
+      .catch();
+  };
 
-    // Submits the form data to the backend
-    const onSubmit = async (event) => {
-      event.preventDefault();
-      setFormValues({ ...formValues, success: false, loading: true });
+  // Displays error message if there's any
+  const errorMessage = () => {
+    return (
+      <div
+        className="error-message"
+        style={{ display: error ? "" : "none", color: "red" }}
+      >
+        {error}
+      </div>
+    );
+  };
 
-      // Placeholder for the signup function calling the backend
-      signup({ name, email, password })
-        .then((data) => {
-          if (data.error) {
-            setFormValues({
-              ...formValues,
-              error: data.error,
-              loading: false,
-              success: false,
-            });
-          } else {
-            setFormValues({ ...formValues, success: true });
-          }
-        })
-        .catch();
-    };
-
-    // Displays error message if there's any
-    const errorMessage = () => {
-      return (
+  // Displays loading message during form submission
+  const loadingMessage = () => {
+    return (
+      loading && (
         <div
-          className="error-message"
+          className="loading-message"
           style={{ display: error ? "" : "none", color: "red" }}
         >
-          {error}
+          <div className="loading-spinner"></div>
+          <p>Loading...</p>
         </div>
-      );
-    };
+      )
+    );
+  };
 
-    // Displays loading message during form submission
-    const loadingMessage = () => {
-      return (
-        loading && (
-          <div
-            className="loading-message"
-            style={{ display: error ? "" : "none", color: "red" }}
-          >
-            <div className="loading-spinner"></div>
-            <p>Loading...</p>
-          </div>
-        )
-      );
-    };
-
-    // Displays success message upon successful form submission
-    const successMessage = () => {
-      return (
-        success && (
-          <div>
-            <center>
-              <p className="login_redirect mt-2">
-                Account created successfully{" "}
-                <b>
-                  <a href="/signin">Login here</a>
-                </b>
-              </p>
-            </center>
-          </div>
-        )
-      );
-    };
-
+  // Displays success message upon successful form submission
+  const successMessage = () => {
     return (
-      <div className="form-container">
-        <div className="form-box">
-          <h2>Create an account</h2>
-          {errorMessage()}
-          {loadingMessage()}
-          {successMessage()}
-          <form>
+      success && (
+        <div>
+          <center>
+            <p className="login_redirect mt-2">
+              Account created successfully{" "}
+              <b>
+                <a href="/signin">Login here</a>
+              </b>
+            </p>
+          </center>
+        </div>
+      )
+    );
+  };
+
+  return (
+    <div className="form-container">
+      <div className="form-box">
+        <h2>Create an account</h2>
+        {errorMessage()}
+        {loadingMessage()}
+        {successMessage()}
+        <form>
           <div className="form-group">
             <label htmlFor="name">Username</label>
             <input
@@ -130,22 +130,24 @@ const Signup = () => {
             />
           </div>
           <div className="form-group-button">
-            <button className="signup-button" onClick={onSubmit}>Signup</button>
-            </div>
-          </form>
-          <div className="login-message">
-            <center>
-              <p className="login_redirect mt-2">
-                Already have an account?
-                <b>
-                  <a href="/signin"> Login here</a>
-                </b>
-              </p>
-            </center>
+            <button className="signup-button" onClick={onSubmit}>
+              Signup
+            </button>
           </div>
+        </form>
+        <div className="login-message">
+          <center>
+            <p className="login_redirect mt-2">
+              Already have an account?
+              <b>
+                <a href="/signin"> Login here</a>
+              </b>
+            </p>
+          </center>
         </div>
       </div>
-    );
+    </div>
+  );
 };
 
 export default Signup;

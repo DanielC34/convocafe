@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { signin, authenticate } from '../../backend';
+import React, { useState } from "react";
+import { signin, authenticate } from "../../auth";
 import { Navigate } from "react-router-dom";
-import './Login.css';
+import "./Login.css";
 
 const Login = () => {
   // Initializing states for form fields, error, loading, and success messages
@@ -77,34 +77,36 @@ const Login = () => {
       <div className="form-box">
         <h2>Login</h2>
         {loadingMessage()}
-          {errorMessage()}
-          <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            value={email}
-            onChange={handleChange("email")}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={handleChange("password")}
-            required
-          />
-        </div>
-        <div className="form-group-button">
-          <button className='login-button' onClick={onSubmit}>Log in</button>
+        {errorMessage()}
+        <form onSubmit={onSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={email}
+              onChange={handleChange("email")}
+              required
+            />
           </div>
-          </form>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={handleChange("password")}
+              required
+            />
+          </div>
+          <div className="form-group-button">
+            <button className="login-button" onClick={onSubmit}>
+              Log in
+            </button>
+          </div>
+        </form>
         <div className="login-message">
           <center>
             <p className="login_redirect mt-2">
@@ -118,6 +120,6 @@ const Login = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

@@ -37,29 +37,49 @@ const registerUser = asyncHandler(async(req, res) => {
             profilePicture: user.profilePicture,
             token:generateToken(user._id)
         });
-    } else { //if this fails
+    } else { //if this fails it returns an error
         res.send(400);
         throw new Error("Failed to create new user");
     }
 });
 
-const authUser = asyncHandler(async(req, res) => {
+const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
+    //Find user by email in database
     const user = await User.findOne({ email });
 
+    // If user exists and password matches, return user details and token
     if (user && (await user.passwordMatch(password))) {
         res.status(201).json({
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          profilePicture: user.profilePicture,
-          token: generateToken(user._id),
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            profilePicture: user.profilePicture,
+            token: generateToken(user._id),
         });
-    } else {
+    } else { //Returns an error if authentication fails
         res.status(400);
         throw new Error("Failed to create user");
     }
-})
+});
 
-module.exports = { registerUser, authUser }
+const allUsers = asyncHandler(async (req, res) => {
+  // Extracting the search keyword from the query parameters
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  // Finding all users based on the keyword and excluding the current user
+  const users = await User.find({ ...keyword, _id: { $ne: req.user._id } });
+
+  // Sending the found users as the response
+  res.send(users);
+});
+
+module.exports = { registerUser, authUser, allUsers };
