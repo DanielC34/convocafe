@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/authRoutes");
+const userRouter = require("./routes/userRoutes");
 
 require("dotenv").config();
 
@@ -16,7 +17,7 @@ mongoose
   .catch((err) => console.log("Database connection failed", err));
 
 // Starting the app server
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
@@ -31,4 +32,17 @@ app.use(cors()); //CORS for enabling cross-origin resource sharing
 
 //Routing
 app.use("/api", authRouter); //Mount authentication-related routes under '/api' endpoint
+app.use('/api/users', userRouter);
+
+//Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+})
+
+//Handle 404 errors for undefined routes
+app.use((req, res, next) => {
+  res.status(404).send("Sorry, route does not exist.");
+});
+
 
