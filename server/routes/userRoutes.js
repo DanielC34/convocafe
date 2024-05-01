@@ -4,6 +4,7 @@ const { registerUser, authUser, allUsers } = require("../controllers/userControl
 const router = express.Router();
 
 router.route('/').post(registerUser).get(allUsers)
-router.route('/login').post(authUser)
+router.route('/signin').post(authUser)
+router.route('/').get(allUsers);
 
 module.exports = router;
