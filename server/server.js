@@ -28,7 +28,7 @@ app.use(bodyParser.json()); //Body parser to parse incoming request bodies as JS
 
 app.use(cookieParser()); // Cookie parser to handle cookies
 
-app.use(cors()); //CORS for enabling cross-origin resource sharing
+app.use(cors({})); //CORS for enabling cross-origin resource sharing
 
 //Routing
 app.use("/api", authRouter); //Mount authentication-related routes under '/api' endpoint
@@ -38,7 +38,8 @@ app.use('/api/users', userRouter);
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
-})
+});
+
 
 //Handle 404 errors for undefined routes
 app.use((req, res, next) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './SearchBar.css'
 import axios from 'axios';
 import Coffee from '../../pages/img/coffee1.png'
@@ -12,43 +12,43 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import { isAuthenticated } from '../../auth';
 import { createTheme, ThemeProvider } from '@mui/material';
 
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = () => {
 
-  const [searchText, setSearchText] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [users, setUsers] = useState([]);
 
-  const handleChange = (e) => {
-    setSearchText(e.target.value)
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(searchText)
-  };
-
-  const handleOpenDialog = () => {
-    //Logic to open new chat goes here
-    setDialogOpen(true);
-    fetchUsers();
-    console.log("Opening new chat...");
-  }
-  
-  const handleCloseDialog = () => {
-    setDialogOpen(false)
-  }
-  
-  const fetchUsers = async () => {
+  const handleOpenDialog = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/users");
+      const token = isAuthenticated(); //Retrieve token from localStorage
+      if (!token) {
+        throw new Error("No token found in local storage");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        "http://localhost:8000/api/users",
+        config
+      );
       setUsers(response.data);
+      setDialogOpen(true);
     } catch (err) {
-      console.error('Error fetching users: ', err);
+      console.error("Error fetching users: ", err);
     }
-  };
+  }
+  
+
+      const handleCloseDialog = () => {
+        setDialogOpen(false);
+      };
 
   const theme = createTheme({
     palette: {
@@ -61,7 +61,7 @@ const SearchBar = ({ onSearch }) => {
   return (
     <ThemeProvider theme={theme}>
       <div className="search-bar">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => e.preventDefault}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <img
               src={Coffee}
@@ -84,16 +84,20 @@ const SearchBar = ({ onSearch }) => {
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogTitle>Select User</DialogTitle>
           <DialogContent>
-            <List>
-              {users.map((user) => (
-                <ListItem key={user.id} button>
-                  <ListItemAvatar>
-                    <Avatar alt={user.name} src={user.profilePic} />
-                  </ListItemAvatar>
-                  <ListItemText primary={user.name} />
-                </ListItem>
-              ))}
-            </List>
+            {users.length === 0 ? (
+              <p>Loading users...</p>
+            ) : (
+              <List>
+                {users.map((user) => (
+                  <ListItem key={user._id} button>
+                    <ListItemAvatar>
+                      <Avatar alt={user.name} src={user.profilePicture} />
+                    </ListItemAvatar>
+                    <ListItemText primary={user.name} />
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Close</Button>

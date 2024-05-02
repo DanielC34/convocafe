@@ -2,36 +2,51 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 
-//Middleware function to protect routes that require user authentication
-const protect = asyncHandler(async (req, res, next) => {
-    let token;
+//Middleware function to verify JWT protected routes
+const verifyToken = asyncHandler(async (req, res, next) => {
+    //Extract token from authorization header
+    const authHeader = req.headers.authorization;
 
-    //Check if request has authorised header with bearer token
-    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-        try {
-            //Extract token from authorization header
-            token = req.headers.authorization.split(" ")[1];
-
-            //Verify the token and decode user ID
-            const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY, process.env);
-
-            //Find user by decoded user ID and exclude password from response
-            req.user = await User.findById(decoded.id).select("-password");
-
-            //Proceed to the next middleware
-            next();
-        } catch (err) {
-            //Handle token verification error(s)
-            res.status(401);
-            throw new Error("Not authorized, token failure");
-        }
+    if (!authHeader || !authHeader.startsWith("Bearer")) {
+        res.status(401);
+        throw new Error("Unauthorized - No token provided")
     }
 
-    //If token is not provided in request header
+    const token = authHeader.split(" ")[1];
+
     if (!token) {
         res.status(401);
-        throw new Error("Not authorized, no token");
+        throw new Error("Unauthorized - No token provided")
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
+
+    try {
+        const decoded = jwt.verify(token, jwtSecret);
+
+        const user = await User.findById(decoded.id).select("-password");
+
+        if (!user) {
+            res.status(401);
+            throw new Error("Unauthorized - User not found")
+        }
+
+        req.user = user;
+        next();
+    } catch (err) {
+        console.error("Token verification error:", err);
+        res.status(401).json({ error: "Unauthorized - Invalid token" });
     }
 });
 
-module.exports = { protect };
+//Middleware function to protect routes that require user authentication
+const protect = asyncHandler(async (req, res, next) => {
+    try {
+        await verifyToken(req, res, next);
+    } catch (err) {
+        console.error("Token verification error:", err.message);
+        res.status(401).json({ error: "Unauthorized - Token verification failed" });
+    }
+});
+
+module.exports = { protect, verifyToken };

@@ -43,6 +43,7 @@ const registerUser = asyncHandler(async(req, res) => {
     }
 });
 
+//Handle user authentication
 const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -51,35 +52,38 @@ const authUser = asyncHandler(async (req, res) => {
 
     // If user exists and password matches, return user details and token
     if (user && (await user.passwordMatch(password))) {
+
+        //Generate JWT token
+        const token = generateToken(user._id);
+
+        //Send user details and token in response
         res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
             profilePicture: user.profilePicture,
-            token: generateToken(user._id),
+            token: token,
         });
     } else { //Returns an error if authentication fails
         res.status(400);
-        throw new Error("Failed to create user");
+        throw new Error("Invalid email or password");
     }
 });
 
 const allUsers = asyncHandler(async (req, res) => {
-  // Extracting the search keyword from the query parameters
-  const keyword = req.query.search
-    ? {
-        $or: [
-          { name: { $regex: req.query.search, $options: "i" } },
-          { email: { $regex: req.query.search, $options: "i" } },
-        ],
-      }
-    : {};
-
-  // Finding all users based on the keyword and excluding the current user
-  const users = await User.find({ ...keyword, _id: { $ne: req.user._id } });
-
-  // Sending the found users as the response
-  res.send(users);
+  if (!req.user || !req.user._id) {
+    res.status(400).send("User not authenticated");
+    return;
+  }
+  
+  try {
+    // Finding all users in the database
+    const users = await User.find({});
+    // Sending the found users as the response
+    res.send(200).json(users)
+  } catch (error) {
+      console.error("Error fetching users: ", error);
+      res.status(500).json({error: "Internal seerver error"})
+  };
 });
-
 module.exports = { registerUser, authUser, allUsers };

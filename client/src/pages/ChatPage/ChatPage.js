@@ -14,6 +14,10 @@ const Chat = () => {
     { text: "Hi! How can i help you?", sender: "other" },
   ];
 
+  const userName = authenticatedUser &&
+    authenticatedUser.user &&
+    authenticatedUser.user.name;
+
   return !authenticatedUser ? (
     <h1>Please sign in</h1>
   ) : (
@@ -24,7 +28,9 @@ const Chat = () => {
       <div className="chat-window">
         {/*Chat window content goes here*/}
         <Navbar />
-        <h1>Chat Window, {authenticatedUser.user.name}</h1>
+        <h1>
+            Chat Window,{userName}
+        </h1>
         <ChatBox messages={messages} />
         <InputBox />
       </div>
