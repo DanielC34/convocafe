@@ -1,27 +1,31 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./LandingPage.css";
-import Coffee from "../img/coffee1.png";
+import { Link } from "react-router-dom";
+import Coffee from "../../components/img/coffee1.png"; 
 
 const LandingPage = () => {
   return (
-    <div className="landing-page-container">
-      <div className="landing-page-content">
-        <div className="logo-container">
-          <img src={Coffee} alt="Coffee Cup Icon" className="logo" />
-          <h1 className="landing-page-heading">ConvoCafe</h1>
-        </div>
-        <p className="landing-page-subheading">
-          A place you get to chat with different people
-        </p>
-        <div className="buttons-container">
-          <Link to="/signin">
-            <button className="login-button">Login</button>
-          </Link>
-          <Link to="/signup">
-            <button className="signup-button">Sign up</button>
-          </Link>
-        </div>
+    <div className="landing-page-contaner">
+      <img src={Coffee} alt="Coffee" className="logo-image" />
+      <h1 className="landing-page-heading">ConvoCafe</h1>
+      <h3>Offline Chatting Platform</h3>
+      <div>
+        <Link to="/signup">
+          <button className="signup-button">
+            <span className="transition"></span>
+            <span className="gradient"></span>
+            <span className="label">Sign Up</span>
+          </button>
+        </Link>
+      </div>
+      <div>
+        <Link to="/login">
+          <button className="login-button">
+            <span className="transition"></span>
+            <span className="gradient"></span>
+            <span className="label">Log In</span>
+          </button>
+        </Link>
       </div>
     </div>
   );

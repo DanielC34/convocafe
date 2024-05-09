@@ -1,49 +1,82 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const app = express();
-const mongoose = require("mongoose");
+const express = require('express');
+const dotenv = require('dotenv');
+const authRouter = require("./routes/auth");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const authRouter = require("./routes/authRoutes");
-const userRouter = require("./routes/userRoutes");
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const http = require('http');
+const socketIo = require('socket.io');
+const mongoose = require("mongoose");
+const userRouter = require("./routes/user");
+const messagesRouter = require("./routes/messages");
 
-require("dotenv").config();
+// Load environment variables
+dotenv.config();
 
-//Database connection 
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => console.log("Database connected successfully"))
-  .catch((err) => console.log("Database connection failed", err));
-
-// Starting the app server
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+//Connect to MongoDB database
+mongoose.connect(process.env.MONGO_URI, {}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch((error) => {
+    console.log('Error connecting to MongoDB: ', error.message);
+    process.exit(1);
 });
 
-//Middleware Configuration
-
-app.use(bodyParser.json()); //Body parser to parse incoming request bodies as JSON
-
-app.use(cookieParser()); // Cookie parser to handle cookies
-
-app.use(cors({})); //CORS for enabling cross-origin resource sharing
-
-//Routing
-app.use("/api", authRouter); //Mount authentication-related routes under '/api' endpoint
-app.use('/api/users', userRouter);
-
-//Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
+//Create express app and http server
+const app = express();
+const httpServer = http.createServer(app);
+const io = new socketIo.Server(httpServer, { //Set up socket.io for real time communication
+    cors: {
+        origin: '*',
+    }
 });
 
+//Handle socket.io events
+io.on('connection', (socket) => {
+    console.log('User connected');
 
-//Handle 404 errors for undefined routes
-app.use((req, res, next) => {
-  res.status(404).send("Sorry, route does not exist.");
+    socket.on('chats message', (msg) => {
+        console.log('message: ' + JSON.stringify(msg));
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+
+    socket.on('message', (msg) => {
+        console.log(`message ${socket.id}: ` + JSON.stringify(msg));
+    });
+
+    socket.on('send-message', (msg) => {
+        console.log('message: ' + JSON.stringify(msg));
+        io.emit('receive-message', msg);
+    });
+
 });
 
+//Attach socket.io to the express app
+app.io = io;
 
+//Define a route to check server status
+app.get('/status', (req, res) => {
+    res.send({
+        message: 'Server is running',
+        status: 200
+    });
+});
+
+//Middleware setup
+app.use(cors()); // Enable CORS for all routes
+app.use(helmet()); // Set secure HTTP headers
+app.use(morgan('dev')); // Log HTTP requests
+app.use(bodyParser.json()); // Parse JSON requests
+app.use(authRouter); //Attach authentication routes
+app.use(userRouter); //Attach user routes
+app.use(messagesRouter); //Attach message routes
+
+//Define the port for the server to listen on
+const PORT = process.env.PORT || 3001;
+
+httpServer.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
