@@ -8,8 +8,8 @@ const connectDB = async () => {
           useNewUrlParser: true,
           useUnifiedTopology: true,
         });
-
-        //Successful connection message displayed when database is connected
+/////////////
+        // Successful connection message displayed when database is connected
         console.log(`MongoDb connected: ${con.connection.host}`)
     } catch (err) {
         //Error thrown when connection has failed
