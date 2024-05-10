@@ -13,7 +13,7 @@ const ChatPage = () => {
                 color="[#EEEDE8]"
             >
                 <div className="gap-1 text-center w-full">
-                    <h2 className="text-2xl font-medium">Welcome to Convocate</h2>
+                    <h2 className="text-2xl font-medium">Welcome to Convocafe</h2>
                     <p>Chat with different people</p>
                 </div>
 
