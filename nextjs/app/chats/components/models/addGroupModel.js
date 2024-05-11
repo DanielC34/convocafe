@@ -43,7 +43,20 @@ const AddGroupUserModel = ({ onClose }) => {
           console.log(`Creating group "${groupName}" with users:`, selectedUsers);
 
           //Make API call to create the group
-          const response = await fetch("")
+          const response = await fetch("/groups", {
+            method: "POST",
+            headers: {
+              "Content": "application/json",
+            },
+            body: JSON.stringify({
+              groupName,
+              members: selectedUsers,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to create group");
+          }
 
           //Reset state and close modal
           setGroupName('');

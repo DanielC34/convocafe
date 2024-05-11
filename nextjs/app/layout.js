@@ -5,7 +5,7 @@ import ClientLayout from "@/app/client_layout";
 const inter = Inter({subsets: ["latin"]});
 
 export const metadata = {
-    title: "Convocate",
+    title: "Convocafe",
     description: "Chat with different people",
 };
 

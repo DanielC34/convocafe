@@ -1,10 +1,29 @@
 const User = require("../models/user");
 const mustBeAuthenticated = require("../middleware");
-const { Chat } = require("../models/chat");
+const { Chat, Group } = require("../models/chat");
 
 //Set up userRouter and apply authentication middleware
 const userRouter = require('express').Router();
 userRouter.use(mustBeAuthenticated);
+
+//Route to create a new group (POST /groups)
+userRouter.post('/groups', async (req, res) => {
+    try {
+        const { groupName, members } = req.body;
+
+        //Create a new group
+        const group = new Group({ groupName, members });
+
+        //Save the group in the database
+        await group.save();
+        
+        //Respond with created group object
+        res.status(201).send(group);
+    } catch (err) {
+        console.error("Error creating group: ", err);
+        res.status(500).send({ msg: 'Failed to create group' });
+    }
+});
 
 //Route to get current user's details (GET /users/me)
 userRouter.get('/users/me', async (req, res) => {

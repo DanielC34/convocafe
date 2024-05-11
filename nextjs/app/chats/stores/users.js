@@ -25,6 +25,23 @@ export const useUserStore = create((set) => ({
             set((state) => ({loading: false}));
         }
     },
+    createGroup: async (groupName, selectedUsers) => {
+        try {
+            set((state) => ({ loading: true }));
+            const res = await axios.post('/groups', { groupName: groupName, selectedUsers: selectedUsers });
+
+            const newGroup = res.data;
+
+            set((state) => ({
+                users: [...state.users, newGroup],
+                userIDs: { ...state.userIDs, [newGroup.id]: newGroup }
+            }));
+        } catch (err) {
+            console.log(err);
+        } finally {
+            set((state) => ({ loading: false }));
+         }
+    }
 
 }));
 
