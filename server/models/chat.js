@@ -1,5 +1,38 @@
 const { Schema, model } = require("mongoose");
 
+const groupSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    members: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        // Add id field with value of _id
+        ret.id = ret._id;
+        // Delete _id and __v
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        // Add id field with value of _id
+        ret.id = ret._id;
+        // Delete _id and __v
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  }
+);
+
+
 // ChatSchema defined using mongoose Schema
 const chatSchema = new Schema(
     {
@@ -58,8 +91,12 @@ const findByRecipientsOrSave = async (participants) => {
 //Creates Chat model based on chatSchema 
 const Chat = model("Chat", chatSchema);
 
+//Create the Group model based on groupSchema
+const Group = model("Group", groupSchema);
+
 //Export Chat model and findByRecipientsOrSave function for use in other parts of program
 module.exports = {
     Chat,
+    Group,
     findByRecipientsOrSave
 };

@@ -50,7 +50,7 @@ const AddGroupUserModel = ({ onClose }) => {
             },
             body: JSON.stringify({
               groupName,
-              members: selectedUsers,
+              selectedUsers,
             }),
           });
 
