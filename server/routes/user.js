@@ -6,32 +6,6 @@ const { Chat, Group } = require("../models/chat");
 const userRouter = require('express').Router();
 userRouter.use(mustBeAuthenticated);
 
-//Route to create a new group (POST /groups)
-userRouter.post('/groups', async (req, res) => {
-    try {
-      //Extract necessary data from request body
-      const { groupName, selectedUsers } = req.body;
-
-      if (!groupName || !selectedUsers || Array.isArray(selectedUsers)) {
-        return res
-          .status(400)
-          .send({ msg: "Invalid request. Missing required data" });
-      }
-
-      //Create a new group
-      const group = new Group({ name: groupName, members: selectedUsers });
-
-      //Save the group in the database
-      await group.save();
-
-      //Respond with created group object
-      res.status(201).send({msg: "Group created successfully", group});
-    } catch (err) {
-        console.error("Error creating group: ", err);
-        res.status(500).send({ msg: 'Failed to create group' });
-    }
-});
-
 //Route to get current user's details (GET /users/me)
 userRouter.get('/users/me', async (req, res) => {
     try {

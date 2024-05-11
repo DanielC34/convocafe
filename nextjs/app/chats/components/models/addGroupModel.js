@@ -7,7 +7,7 @@ const AddGroupUserModel = ({ onClose }) => {
     const [groupName, setGroupName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
   
-  const { users, loading, fetchUsers } = useUserStore();
+  const { users, fetchUsers } = useUserStore();
 
   useEffect(() => {
     if (isModalOpen) {
@@ -43,7 +43,7 @@ const AddGroupUserModel = ({ onClose }) => {
           console.log(`Creating group "${groupName}" with users:`, selectedUsers);
 
           //Make API call to create the group
-          const response = await fetch("/groups", {
+          const response = await fetch("/messages/groups", {
             method: "POST",
             headers: {
               "Content": "application/json",

@@ -6,6 +6,33 @@ const mustBeAuthenticated = require("../middleware");
 //Middleware to ensure authentication
 messagesRouter.use(mustBeAuthenticated);
 
+//Route to create a new group (POST /groups)
+messagesRouter.post('/groups', async (req, res) => {
+    try {
+      //Extract necessary data from request body
+      const { groupName, selectedUsers } = req.body;
+
+      if (!groupName || !selectedUsers || Array.isArray(selectedUsers)) {
+        return res
+          .status(400)
+          .send({ msg: "Invalid request. Missing required data" });
+      }
+
+      //Create a new group
+      const group = new Chat({ name: groupName, members: selectedUsers });
+
+      //Save the group in the database
+      await group.save();
+
+      //Respond with created group object
+      res.status(201).send({msg: "Group created successfully", group});
+    } catch (err) {
+        console.error("Error creating group: ", err);
+        res.status(500).send({ msg: 'Failed to create group' });
+    }
+});
+
+
 //Route to get messages for a specific chat (GET /auth/messages)
 messagesRouter.get('/messages', async (req, res) => {
     const chatID = req.query.chatId;
