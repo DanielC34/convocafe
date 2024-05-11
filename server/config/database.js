@@ -1,24 +1,22 @@
-// const mongoose = require('mongoose');
-// const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
-// dotenv.config();
+//Async function connectDB connects to MongoDB database
+const connectDB = async () => {
+    try {
+        //Mongoose connects to MongoDB database with MongoDB URI
+        const con = await mongoose.connect(process.env.MONGODB_URI, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+/////////////
+        // Successful connection message displayed when database is connected
+        console.log(`MongoDb connected: ${con.connection.host}`)
+    } catch (err) {
+        //Error thrown when connection has failed
+        console.log(`Error: ${err.message}`);
+        process.exit(1);
+    }
+};
 
-// // Function to establish MongoDB connection
-// const connectDB = async () => {
-//     try {
-//         //Attempts to connect to MongoDB
-//         const con = mongoose
-//           .connect(process.env.MONGO_URL)
-//           .then(() => console.log("Database connected successfully"))
-//           .catch((err) => console.log("Database connection failed", err));
-//         //Successful connection message
-//     console.log(`MongoDb connected: ${con.connection.host}`)
-//     } catch (err) {
-//         //Error connection message
-//         console.log(`Connection error to MongoDB: ${err.message}`);
-//         process.exit(1);
-//     }
-// };
-
-// //Export the connectDB function to be used elsewhere
-// module.exports = connectDB;
+//Export function for use in other parts of application
+module.exports = connectDB;

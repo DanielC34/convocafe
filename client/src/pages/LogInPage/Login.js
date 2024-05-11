@@ -1,125 +1,57 @@
-import React, { useState } from "react";
-import { signin, authenticate } from "../../auth";
-import { Navigate } from "react-router-dom";
-import "./Login.css";
+import React, { useState } from 'react'
+import './Login.css'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
-  // Initializing states for form fields, error, loading, and success messages
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
-    error: "",
-    loading: false,
-    success: false,
-  });
 
-  // Destructuring values from the state
-  const { email, password, error, loading, success } = values;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  // Handles changes in the input fields
-  const handleChange = (name) => (event) => {
-    setValues({ ...values, error: false, [name]: event.target.value });
-  };
+   const handleLogin = (e) => {
+     e.preventDefault(); // Prevent the default form submission behavior
 
-  // Submits the form data to the backend for user authentication
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    setValues({ ...values, success: false, loading: true });
-    signin({ email, password })
-      .then((data) => {
-        if (data.error) {
-          setValues({
-            ...values,
-            error: data.error,
-            loading: false,
-            success: false,
-          });
-        } else {
-          authenticate(data, () => {
-            setValues({ ...values, success: true });
-          });
-        }
-      })
-      .catch();
-  };
+     // Add your login logic here, e.g., make an API call to authenticate the user
+     console.log("Logging in with email:", email, "and password:", password);
 
-  // Displays error message if there's any
-  const errorMessage = () => {
-    return (
-      <div
-        className="error-message"
-        style={{ display: error ? "" : "none", color: "red" }}
-      >
-        {error}
-      </div>
-    );
-  };
+     // Clear the form fields after submission
+     setEmail("");
+     setPassword("");
+   };
 
-  // Displays loading message during form submission
-  const loadingMessage = () => {
-    return (
-      loading && (
-        <div
-          className="loading-message"
-          style={{ display: error ? "" : "none", color: "red" }}
-        >
-          <div className="loading-spinner"></div>
-          <p>Loading...</p>
+  return (
+    <div className="form-box">
+      <form className="form" onSubmit={handleLogin}>
+        <span className="title">Log In</span>
+        <span className="subtitle">Log in to your account</span>
+        <div className="form-container">
+          <input
+            type="email"
+            className="input"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            className="input"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
-      )
-    );
-  };
-
-  return success ? (
-    <Navigate to="/chats" />
-  ) : (
-    <div className="form-container">
-      <div className="form-box">
-        <h2>Login</h2>
-        {loadingMessage()}
-        {errorMessage()}
-        <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="text"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleChange("email")}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={handleChange("password")}
-              required
-            />
-          </div>
-          <div className="form-group-button">
-            <button className="login-button" onClick={onSubmit}>
-              Log in
-            </button>
-          </div>
-        </form>
-        <div className="login-message">
-          <center>
-            <p className="login_redirect mt-2">
-              Don't have an account?
-              <b>
-                <a href="/signup"> Signup here</a>
-              </b>
-            </p>
-          </center>
-        </div>
+        <button type="submit" className="login-button">
+          Log In
+        </button>
+      </form>
+      <div className="form-section">
+        <p>
+          Don't have an account? <Link to="/signup">Sign up</Link>
+        </p>
       </div>
     </div>
   );
-};
+}
 
 export default Login;

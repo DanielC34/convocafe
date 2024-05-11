@@ -1,0 +1,76 @@
++-----------------+             +---------------------+             +---------------------+
+|    Client       |    HTTP     |      Server         |    Database   |       Database      |
+|                 |  Request    |                     |   (MongoDB)   |      (MongoDB)      |
++--------+--------+             +----------+----------+             +----------+----------+
+         |                                    |                               |
+         |       Fetch Group Chats List        |                               |
+         +----------------------------------->|    Query Database:           |
+         |                                    |    Retrieve all group chats   |
+         |                                    |<------------------------------+
+         |       List of Group Chats           |                               |
+         |<-----------------------------------+                               |
+         |                                    |                               |
+         |                                    |                               |
+         |       Create New Group Chat         |                               |
+         +----------------------------------->|    Validate Request:          |
+         |   Group Name, Members List          |    (e.g., Validate data)      |
+         |                                    |    Create new group chat      |
+         |                                    |    in database                |
+         |                                    |<------------------------------+
+         |         Success/Failure             |                               |
+         |<-----------------------------------+                               |
+         |                                    |                               |
+         |                                    |                               |
+         |       Join Group Chat               |                               |
+         +----------------------------------->|    Validate Request:          |
+         |   Group Chat ID, User ID            |    (e.g., Authentication)     |
+         |                                    |    Add user to group chat     |
+         |                                    |    members list in database   |
+         |                                    |<------------------------------+
+         |         Success/Failure             |                               |
+         |<-----------------------------------+                               |
+         |                                    |                               |
+         |                                    |                               |
+         |       Send Message                  |                               |
+         +----------------------------------->|    Validate Request:          |
+         |   Group Chat ID, User ID, Message   |    (e.g., Authorization)      |
+         |                                    |    Store message in database  |
+         |                                    |    Broadcast message to       |
+         |                                    |    group chat members         |
+         |                                    |<------------------------------+
+         |         Success/Failure             |                               |
+         |<-----------------------------------+                               |
+         |                                    |                               |
+         |                                    |                               |
+         |        Real-time Updates            |                               |
+         |<-----------------------------------+                               |
+         |                                    |                               |
+
+
+// Explanation:
+Client: Represents the user interface (e.g., web browser) where requests originate.
+
+Server: Handles incoming HTTP requests, processes data, and interacts with the database.
+
+Database (MongoDB): Stores and retrieves data related to group chats and messages.
+
+
+
+// Data Flow Steps:
+
+Fetch Group Chats List: Client requests the list of group chats. 
+Server retrieves all group chats from the database and sends the list back to the client.
+
+Create New Group Chat: Client sends a request to create a new group chat with specified details (group name, members). 
+Server validates the request, creates a new group chat record in the database, and responds with success or failure.
+
+Join Group Chat:
+Client requests to join a specific group chat.
+Server validates the request (e.g., user authentication) and adds the user to the group chat members list in the database.
+
+Send Message:
+Client sends a message to a group chat.
+Server validates the request (e.g., user authorization), stores the message in the database, and broadcasts the message to all group chat members for real-time updates.
+
+Real-time Updates:
+After processing actions (e.g., sending a message), the server notifies connected clients (group chat members) of updates to keep chat interfaces synchronized in real-time.
