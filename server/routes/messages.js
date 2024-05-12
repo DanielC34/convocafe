@@ -1,6 +1,7 @@
 const messagesRouter = require('express').Router();
 const {Chat, findByRecipientsOrSave} = require('../models/chat');
 const Message = require('../models/message');
+const User = require('../models/user');
 const mustBeAuthenticated = require("../middleware");
 
 //Middleware to ensure authentication
@@ -12,20 +13,28 @@ messagesRouter.post('/groups', async (req, res) => {
       //Extract necessary data from request body
       const { groupName, userIds } = req.body;
 
-      if (!groupName || !userIds || Array.isArray(userIds)) {
+      if (!groupName || !userIds) {
         return res
           .status(400)
           .send({ msg: "Invalid request. Missing required data" });
       }
+        
+    const users = await User.find({ _id: { $in: userIds } });
 
       //Create a new group
       const chat = new Chat({ type: "group", participants: userIds, name: groupName });
 
       //Save the group in the database
-      await chat.save();
+        await chat.save();
+        
+        const participants = users.map(user => ({
+            username: user.username,
+            email: user.email,
+            id: user.id
+        }));
 
       //Respond with created group object
-      res.status(201).send({msg: "Group created successfully", chat});
+      res.status(201).send({msg: "Group created successfully", chat: { ...chat.toObject(), participants } });
     } catch (err) {
         console.error("Error creating group: ", err);
         res.status(500).send({ msg: 'Failed to create group' });
@@ -118,7 +127,7 @@ messagesRouter.get('/chats', async (req, res) => {
 
     try {
         //Fetch chats where the user is a participant and populate participants' usernames
-        const chats = await Chat.find({participants: userId}).populate('participants', 'username');
+        const chats = await Chat.find({participants: userId}).populate('participants', 'username email');
         res.json(chats);
     } catch (e) {
         console.log(e);
