@@ -6,7 +6,7 @@ const chatSchema = new Schema(
     {
         type: {type: String, required: true}, //Type field is defined as required string
         participants: [{type: Schema.Types.ObjectId, ref: "User", required: true}], //Participants defined as required array of User IDs for referencing in validation
-        name: { type: String, required: true },
+        name: { type: String, },
     }, {
         timestamps: true, // Automatically adds createdAt and updatedAt fields. Shows when chat was create/updated
         toJSON: {

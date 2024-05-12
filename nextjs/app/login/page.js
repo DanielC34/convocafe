@@ -12,7 +12,6 @@ import {isNotAuth} from "@/utils/auth";
 const loginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
 

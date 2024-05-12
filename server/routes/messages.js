@@ -18,23 +18,42 @@ messagesRouter.post('/groups', async (req, res) => {
           .status(400)
           .send({ msg: "Invalid request. Missing required data" });
       }
-        
-    const users = await User.find({ _id: { $in: userIds } });
+
+      const users = await User.find({ _id: { $in: userIds } });
 
       //Create a new group
-      const chat = new Chat({ type: "group", participants: userIds, name: groupName });
+      const chat = new Chat({
+        type: "group",
+        participants: userIds,
+        name: groupName,
+      });
 
       //Save the group in the database
-        await chat.save();
-        
-        const participants = users.map(user => ({
-            username: user.username,
-            email: user.email,
-            id: user.id
-        }));
+      await chat.save();
+
+      // Populate the 'participants' field of the saved chat with user details
+      const populatedChat = await Chat.findById(chat._id).populate(
+        "participants",
+        "username email -_id"
+      );
+
+      // Modify the populated participants array to have username and email as separate properties
+      const formattedParticipants = populatedChat.participants.map(
+        (participant) => ({
+          username: participant.username,
+          email: participant.email,
+          id: participant._id, // Optionally include the user ID if needed
+        })
+      );
 
       //Respond with created group object
-      res.status(201).send({msg: "Group created successfully", chat: { ...chat.toObject(), participants } });
+      res.status(201).send({
+        msg: "Group created successfully",
+        chat: {
+          ...populatedChat.toObject(),
+          participants: formattedParticipants,
+        },
+      });
     } catch (err) {
         console.error("Error creating group: ", err);
         res.status(500).send({ msg: 'Failed to create group' });
@@ -127,7 +146,7 @@ messagesRouter.get('/chats', async (req, res) => {
 
     try {
         //Fetch chats where the user is a participant and populate participants' usernames
-        const chats = await Chat.find({participants: userId}).populate('participants', 'username email');
+        const chats = await Chat.find({participants: userId}).populate('participants', 'username');
         res.json(chats);
     } catch (e) {
         console.log(e);
