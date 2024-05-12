@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FilledButton from "@/components/buttons/filled-button";
 import { useUserStore } from "@/app/chats/stores/users";
+import axios from "@/http/axios";
 
 const AddGroupUserModel = ({ onClose }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,27 +43,29 @@ const AddGroupUserModel = ({ onClose }) => {
           //Perform group creation logic here(e.g. API call)
           console.log(`Creating group "${groupName}" with users:`, selectedUsers);
 
+          const userIds = selectedUsers.map(user => user.id);
+
           //Make API call to create the group
-          const response = await fetch("/groups", {
-            method: "POST",
-            headers: {
-              "Content": "application/json",
-            },
-            body: JSON.stringify({
-              groupName,
-              selectedUsers,
-            }),
+          const response = await axios.post("/groups", {
+            groupName: groupName,
+            userIds: userIds,
           });
 
-          if (!response.ok) {
-            throw new Error("Failed to create group");
-          }
+          console.log("Response: ", response.data);
 
-          //Reset state and close modal
-          setGroupName('');
-          setSelectedUsers([]);
-          setIsModalOpen(false);
-          onClose(); //Close modal
+          // if (response.status !== 200) {
+          //   throw new Error("Failed to create group");
+          // }
+
+          if (response.status === 201) {
+            //Reset state and close modal
+            setGroupName('');
+            setSelectedUsers([]);
+            setIsModalOpen(false);
+            onClose(); //Close modal
+          } else {
+            throw new Error("Failed to create the group");
+          }
         } catch (error) {
           console.error("Error creating group: ", error);
         }

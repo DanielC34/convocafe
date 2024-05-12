@@ -28,10 +28,10 @@ const loginPage = () => {
                 window.location.href = '/'
             }
         } catch (err) {
-            if (err.response.data.msg) {
-                setError(err.response.data.msg)
+            if (err.response && err.response.data && err.response.data.msg) {
+              setError(err.response.data.msg);
             } else {
-                setError("Could not login. Please try again.")
+              setError("Could not login. Please try again.");
             }
         } finally {
             setIsLoading(false)

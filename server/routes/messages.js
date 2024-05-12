@@ -11,7 +11,11 @@ messagesRouter.use(mustBeAuthenticated);
 messagesRouter.post('/groups', async (req, res) => {
     try {
       //Extract necessary data from request body
-      const { groupName, userIds } = req.body;
+        const { groupName, userIds } = req.body;
+        
+        console.log("Group Name; ", groupName);
+        console.log("User Ids: ", userIds);
+        console.log("Request Body: ", req.body);
 
       if (!groupName || !userIds) {
         return res
@@ -21,10 +25,14 @@ messagesRouter.post('/groups', async (req, res) => {
 
       const users = await User.find({ _id: { $in: userIds } });
 
+        if (users.length !== userIds.length) {
+            return res.status(400).send({ msg: "Invalid user ID(s) provided" });
+        }
+        
       //Create a new group
       const chat = new Chat({
         type: "group",
-        participants: userIds,
+        participants: users.map(user => user._id),
         name: groupName,
       });
 
