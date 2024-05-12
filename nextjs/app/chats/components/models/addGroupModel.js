@@ -43,7 +43,7 @@ const AddGroupUserModel = ({ onClose }) => {
           console.log(`Creating group "${groupName}" with users:`, selectedUsers);
 
           //Make API call to create the group
-          const response = await fetch("/messages/groups", {
+          const response = await fetch("/groups", {
             method: "POST",
             headers: {
               "Content": "application/json",

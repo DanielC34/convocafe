@@ -10,22 +10,22 @@ messagesRouter.use(mustBeAuthenticated);
 messagesRouter.post('/groups', async (req, res) => {
     try {
       //Extract necessary data from request body
-      const { groupName, selectedUsers } = req.body;
+      const { groupName, userIds } = req.body;
 
-      if (!groupName || !selectedUsers || Array.isArray(selectedUsers)) {
+      if (!groupName || !userIds || Array.isArray(userIds)) {
         return res
           .status(400)
           .send({ msg: "Invalid request. Missing required data" });
       }
 
       //Create a new group
-      const group = new Chat({ name: groupName, members: selectedUsers });
+      const chat = new Chat({ type: "group", participants: userIds, name: groupName });
 
       //Save the group in the database
-      await group.save();
+      await chat.save();
 
       //Respond with created group object
-      res.status(201).send({msg: "Group created successfully", group});
+      res.status(201).send({msg: "Group created successfully", chat});
     } catch (err) {
         console.error("Error creating group: ", err);
         res.status(500).send({ msg: 'Failed to create group' });

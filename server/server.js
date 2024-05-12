@@ -75,7 +75,7 @@ app.use(userRouter); //Attach user routes
 app.use(messagesRouter); //Attach message routes
 
 //Define the port for the server to listen on
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8000;
 
 httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
