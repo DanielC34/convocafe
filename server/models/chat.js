@@ -1,10 +1,12 @@
 const { Schema, model } = require("mongoose");
 
+
 // ChatSchema defined using mongoose Schema
 const chatSchema = new Schema(
     {
         type: {type: String, required: true}, //Type field is defined as required string
-        participants: [{type: Schema.Types.ObjectId, ref: "User", required: true}] //Participants defined as required array of User IDs for referencing in validation
+        participants: [{type: Schema.Types.ObjectId, ref: "User", required: true}], //Participants defined as required array of User IDs for referencing in validation
+        name: { type: String, },
     }, {
         timestamps: true, // Automatically adds createdAt and updatedAt fields. Shows when chat was create/updated
         toJSON: {
@@ -28,7 +30,7 @@ const chatSchema = new Schema(
                 delete ret.__v;
                 return ret;
             },
-        } // Allows virtual fields to be returned when model is converted to an object
+        }, // Allows virtual fields to be returned when model is converted to an object
     }
 );
 
@@ -36,7 +38,7 @@ const chatSchema = new Schema(
 const findByRecipientsOrSave = async (participants) => {
     const chat = await Chat.findOne({
         participants: {
-            $all: participants
+            $all: participants,
         }
     });
 
@@ -48,7 +50,7 @@ const findByRecipientsOrSave = async (participants) => {
     //Creates a new chat room otherwise and saves it.
     const newChat = new Chat({
         type: 'private',
-        participants
+        participants,
     });
 
     await newChat.save();
@@ -61,5 +63,5 @@ const Chat = model("Chat", chatSchema);
 //Export Chat model and findByRecipientsOrSave function for use in other parts of program
 module.exports = {
     Chat,
-    findByRecipientsOrSave
+    findByRecipientsOrSave,
 };

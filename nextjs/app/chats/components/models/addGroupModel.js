@@ -7,7 +7,7 @@ const AddGroupUserModel = ({ onClose }) => {
     const [groupName, setGroupName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
   
-  const { users, loading, fetchUsers } = useUserStore();
+  const { users, fetchUsers } = useUserStore();
 
   useEffect(() => {
     if (isModalOpen) {
@@ -50,7 +50,7 @@ const AddGroupUserModel = ({ onClose }) => {
             },
             body: JSON.stringify({
               groupName,
-              members: selectedUsers,
+              selectedUsers,
             }),
           });
 

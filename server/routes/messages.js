@@ -1,10 +1,65 @@
 const messagesRouter = require('express').Router();
 const {Chat, findByRecipientsOrSave} = require('../models/chat');
 const Message = require('../models/message');
+const User = require('../models/user');
 const mustBeAuthenticated = require("../middleware");
 
 //Middleware to ensure authentication
 messagesRouter.use(mustBeAuthenticated);
+
+//Route to create a new group (POST /groups)
+messagesRouter.post('/groups', async (req, res) => {
+    try {
+      //Extract necessary data from request body
+      const { groupName, userIds } = req.body;
+
+      if (!groupName || !userIds) {
+        return res
+          .status(400)
+          .send({ msg: "Invalid request. Missing required data" });
+      }
+
+      const users = await User.find({ _id: { $in: userIds } });
+
+      //Create a new group
+      const chat = new Chat({
+        type: "group",
+        participants: userIds,
+        name: groupName,
+      });
+
+      //Save the group in the database
+      await chat.save();
+
+      // Populate the 'participants' field of the saved chat with user details
+      const populatedChat = await Chat.findById(chat._id).populate(
+        "participants",
+        "username email -_id"
+      );
+
+      // Modify the populated participants array to have username and email as separate properties
+      const formattedParticipants = populatedChat.participants.map(
+        (participant) => ({
+          username: participant.username,
+          email: participant.email,
+          id: participant._id, // Optionally include the user ID if needed
+        })
+      );
+
+      //Respond with created group object
+      res.status(201).send({
+        msg: "Group created successfully",
+        chat: {
+          ...populatedChat.toObject(),
+          participants: formattedParticipants,
+        },
+      });
+    } catch (err) {
+        console.error("Error creating group: ", err);
+        res.status(500).send({ msg: 'Failed to create group' });
+    }
+});
+
 
 //Route to get messages for a specific chat (GET /auth/messages)
 messagesRouter.get('/messages', async (req, res) => {
