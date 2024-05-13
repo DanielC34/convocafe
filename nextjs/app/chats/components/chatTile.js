@@ -20,6 +20,7 @@ const ChatTile = ({chat}) => {
         router.push(`/chats/${chat.id}`);
     }
 
+    const isGroupChat = chat.type === "group";
     const receiver = chat.participants.find((user) => user.id !== authUser?.id)
 
     return (
@@ -37,7 +38,7 @@ const ChatTile = ({chat}) => {
                     className="w-full h-auto"
                     width={20}
                     height={20}
-                    src="/account.png"
+                    src={isGroupChat ? '/group-account.png' : '/account.png'}
                     alt="account icon"
                 />
             </div>
@@ -48,7 +49,7 @@ const ChatTile = ({chat}) => {
                     leading-relaxed
                 ">
                 {
-                    receiver?.username
+                   isGroupChat ? chat?.name : receiver?.username
                 }
             </div>
         </div>

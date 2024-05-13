@@ -116,5 +116,27 @@ export const useChatStore = create((set, get) => ({
         } finally {
             set((state) => ({loading: false}));
         }
+    },
+
+    createGroupChat: async (name, participants) => {
+
+        console.log("Creating group chat")
+        try {
+            const res = await axios.post('/groups', {
+                groupName: name,
+                userIds: participants
+            })
+
+            const newChat = res.data.chat;
+            set((state) => ({
+                chats: [...state.chats, newChat],
+                selectedChat: newChat.id
+            }))
+
+            return newChat;
+        } catch (e) {
+            console.log(e)
+
+        }
     }
 }));

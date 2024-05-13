@@ -5,7 +5,7 @@ import FilledButton from "@/components/buttons/filled-button";
 import {useState} from "react";
 import {useMessageStore} from "@/app/chats/stores/chats";
 
-const ChatTextInput = ({chatId, recipientId}) => {
+const ChatTextInput = ({chatId}) => {
     const [message, setMessage] = useState('');
     const sendMessage = useMessageStore(state => state.sendMessage);
 
@@ -16,7 +16,6 @@ const ChatTextInput = ({chatId, recipientId}) => {
 
         const msg = {
             content: message.trim(),
-            recipientId,
             chatId
         };
 

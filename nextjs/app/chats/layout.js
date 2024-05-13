@@ -7,7 +7,7 @@ import {useModalStore} from "@/app/chats/stores/modal";
 const ChatLayout = ({children}) => {
 
     const isModelOpen = useModalStore(state => state.isOpen)
-    const closeModal = useModalStore(state => state.close)
+    const modal = useModalStore(state => state.modal)
     return (
         <div className="flex h-screen">
             <div className="
@@ -24,7 +24,7 @@ const ChatLayout = ({children}) => {
                 px-3
             ">{children}</div>
 
-            {isModelOpen && <AddUserModal onClose={closeModal}/>}
+            {isModelOpen && modal}
         </div>
     );
 }

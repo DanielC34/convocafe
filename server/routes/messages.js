@@ -10,61 +10,35 @@ messagesRouter.use(mustBeAuthenticated);
 //Route to create a new group (POST /groups)
 messagesRouter.post('/groups', async (req, res) => {
     try {
-      //Extract necessary data from request body
-        const { groupName, userIds } = req.body;
-        
-        console.log("Group Name; ", groupName);
-        console.log("User Ids: ", userIds);
-        console.log("Request Body: ", req.body);
+        //Extract necessary data from request body
+        const {groupName, userIds} = req.body;
 
-      if (!groupName || !userIds) {
-        return res
-          .status(400)
-          .send({ msg: "Invalid request. Missing required data" });
-      }
-
-      const users = await User.find({ _id: { $in: userIds } });
-
-        if (users.length !== userIds.length) {
-            return res.status(400).send({ msg: "Invalid user ID(s) provided" });
+        if (!groupName || !userIds) {
+            return res
+                .status(400)
+                .send({msg: "Invalid request. Missing required data"});
         }
-        
-      //Create a new group
-      const chat = new Chat({
-        type: "group",
-        participants: users.map(user => user._id),
-        name: groupName,
-      });
 
-      //Save the group in the database
-      await chat.save();
+        //Create a new group
+        const chat = new Chat({
+            type: "group",
+            participants: [...userIds, req.user.id],
+            name: groupName,
+        });
 
-      // Populate the 'participants' field of the saved chat with user details
-      const populatedChat = await Chat.findById(chat._id).populate(
-        "participants",
-        "username email -_id"
-      );
+        //Save the group in the database
+        await chat.save();
 
-      // Modify the populated participants array to have username and email as separate properties
-      const formattedParticipants = populatedChat.participants.map(
-        (participant) => ({
-          username: participant.username,
-          email: participant.email,
-          id: participant._id, // Optionally include the user ID if needed
-        })
-      );
+        const newChat = await Chat.populate(chat, {path: 'participants', select: 'username'});
 
-      //Respond with created group object
-      res.status(201).send({
-        msg: "Group created successfully",
-        chat: {
-          ...populatedChat.toObject(),
-          participants: formattedParticipants,
-        },
-      });
+        //Respond with created group object
+        res.status(201).send({
+            msg: "Group created successfully",
+            chat: newChat
+        });
     } catch (err) {
         console.error("Error creating group: ", err);
-        res.status(500).send({ msg: 'Failed to create group' });
+        res.status(500).send({msg: 'Failed to create group'});
     }
 });
 
@@ -98,19 +72,15 @@ messagesRouter.get('/messages', async (req, res) => {
 
 //Route to send a new message (POST /auth/messages)
 messagesRouter.post('/messages', async (req, res) => {
-    let {chatId, content, recipientId} = req.body;
+    let {chatId, content} = req.body;
     const userId = req.user.id;
 
     //Throw error if recipientID is not provided. Validate if it is provided
-    if (!recipientId) {
-        return res.status(400).json({error: 'Recipient ID is required'});
-    }
 
     try {
         //Create a new chat with recipients if chatId is not provided
         if (!chatId) {
-            const chat = await findByRecipientsOrSave([userId, recipientId]);
-            chatId = chat.id;
+            return res.status(400).json({error: 'Chat ID is required'});
         }
 
         //Validate if chatId and content are provided. Throw an error if this is not the case
