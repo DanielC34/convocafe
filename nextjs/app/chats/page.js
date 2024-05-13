@@ -9,19 +9,13 @@ import AddGroupUserModel from "./components/models/addGroupModel";
 
 const ChatPage = () => {
 
-  const [showAddGroupModal, setShowAddGroupModal] = useState(false);
-    const openModal = useModalStore(state => state.open)
+    const openAddUserModal = useModalStore(state => state.openAddUserModal)
+    const openAddGroupModal = useModalStore(state => state.openAddGroupModal)
     const fetchCurrentUser = useAuthStore(state => state.fetchCurrentUser)
     
   useEffect(() => {
         fetchCurrentUser()
   }, [])
-  
-  const handleCreateGroupClick = () => {
-    //Set state to display create group model
-    setShowAddGroupModal(true);
-    console.log("Page create group clicked")
-   }
 
     return (
       <main className="flex h-full justify-center items-center">
@@ -31,20 +25,19 @@ const ChatPage = () => {
             <p>Add new user to chat with privately</p>
           </div>
           <div className="w-full justify-start items-start gap-[30px] inline-flex ">
-            <FilledButton stretch type="primary" onClick={openModal}>
+            <FilledButton stretch type="primary" onClick={openAddUserModal}>
               Add user
             </FilledButton>
             
             <FilledButton
               stretch
               type="secondary"
-              onClick={handleCreateGroupClick}
+              onClick={openAddGroupModal}
             >
               Create group
             </FilledButton>
           </div>
           </FormCard>
-            {showAddGroupModal && <AddGroupUserModel onClose={() => setShowAddGroupModal(false)} />}
       </main>
     );
 }

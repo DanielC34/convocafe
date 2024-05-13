@@ -37,15 +37,16 @@ const AddUserModal = ({onClose}) => {
                 "
                 onClick={stopPropagation}
             >
-                <h2 className="text-xl font-semibold">Add User</h2>
-                {loadingUsers ? <AddUserListSkeleton/> : <AddUserList users={users}/>}
-                <div className="mt-4 flex justify-end items-center gap-4">
+
+                <div className="mt-4 flex justify-between items-center gap-4">
+                    <h2 className="text-xl font-semibold">Add User</h2>
                     <FilledButton
                         dense
                         type='danger'
                         onClick={onClose}
                     > Close</FilledButton>
                 </div>
+                {loadingUsers ? <AddUserListSkeleton/> : <AddUserList users={users}/>}
             </div>
         </div>
     )
@@ -94,6 +95,7 @@ const AddUserList = ({users}) => {
             selectChat(chat.id)
             setLoading(false)
             // navigate to chat page
+            closeModal()
             router.push(`/chats/${chat.id}`)
 
             // close modal

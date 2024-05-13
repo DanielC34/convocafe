@@ -10,14 +10,9 @@ import {useAuthStore} from "@/app/stores/auth";
 import {useRouter} from "next/navigation";
 
 const SideBar = () => {
-  const openModal = useModalStore(state => state.open)
+  const openAddUserModel = useModalStore(state => state.openAddUserModal)
+    const openAddGroupModel = useModalStore(state => state.openAddGroupModal)
   const [showAddGroupModal, setShowAddGroupModal] = useState(false);
-
-  const handleCreateGroupClick = () => {
-    //Set state to display add group modal
-    setShowAddGroupModal(true);
-    console.log("Add group clicked");
-  }
 
   return (
     <>
@@ -39,7 +34,7 @@ const SideBar = () => {
             
       <div className="py-2 space-y-2">
         <FilledButton stretch type="primary"
-          onClick={openModal}
+          onClick={openAddUserModel}
         >
           Add user
         </FilledButton>
@@ -47,36 +42,15 @@ const SideBar = () => {
         <FilledButton
           stretch
           type="secondary"
-          onClick={handleCreateGroupClick}
+          onClick={openAddGroupModel}
         >
           Create Group
         </FilledButton>
       </div>
-
-      {/*Remder the add group modal based on showAddGroupModal state */}
-      {showAddGroupModal && <AddGroupUserModel onClose={() => setShowAddGroupModal(false)} />}
-
       <UserDetails />
     </>
   );
 };
-
-const AddGroupModal = ({ onClose }) => {
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
-        <FilledButton
-          type="secondary"
-          stretch
-        >Add Group</FilledButton>
-        {/*Add content for Add Group Modal */}
-      </div>
-    </div>
-  )
-}
 
 
 const UserDetails = () => {
