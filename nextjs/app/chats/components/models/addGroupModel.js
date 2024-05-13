@@ -29,11 +29,14 @@ const AddGroupUserModel = ({ onClose }) => {
     };
 
     const handleUserCardClick = (userId) => {
-        setSelectedUsers((prevSelectedUsers) => {
-            if (prevSelectedUsers.includes(userId)) {
-                return prevSelectedUsers.filter((id) => id !== userId)
+      setSelectedUsers((prevSelectedUsers) => {
+        const userToAdd = users.find((user) => user.id === userId);
+        if (!userToAdd) return prevSelectedUsers;
+
+            if (prevSelectedUsers.some((user) => user.id === userId)) {
+              return prevSelectedUsers.filter((id) => id !== userId);
             } else {
-                return [...prevSelectedUsers, userId];
+              return [...prevSelectedUsers, userId];
             }
         });
     };
@@ -44,6 +47,12 @@ const AddGroupUserModel = ({ onClose }) => {
           console.log(`Creating group "${groupName}" with users:`, selectedUsers);
 
           const userIds = selectedUsers.map(user => user.id);
+
+          if (!groupName || userIds.length === 0) {
+            throw new Error("Group Name and User(s) are required")
+          }
+          
+          console.log("User Ids: ", userIds);
 
           //Make API call to create the group
           const response = await axios.post("/groups", {

@@ -6,7 +6,7 @@ const {Schema, model} = require('mongoose');
 //Define the user schema
 const userSchema = new Schema({
         username: {type: String, required: true}, //username defined as required string
-    email: { type: String, required: true, unique: true }, //email defined as required string
+        email: { type: String, required: true, unique: true }, //email defined as required string
         password: {type: String, required: true, select: false}, //password defined as required string (not selected by default)
     },
     {
