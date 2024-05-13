@@ -72,19 +72,15 @@ messagesRouter.get('/messages', async (req, res) => {
 
 //Route to send a new message (POST /auth/messages)
 messagesRouter.post('/messages', async (req, res) => {
-    let {chatId, content, recipientId} = req.body;
+    let {chatId, content} = req.body;
     const userId = req.user.id;
 
     //Throw error if recipientID is not provided. Validate if it is provided
-    if (!recipientId) {
-        return res.status(400).json({error: 'Recipient ID is required'});
-    }
 
     try {
         //Create a new chat with recipients if chatId is not provided
         if (!chatId) {
-            const chat = await findByRecipientsOrSave([userId, recipientId]);
-            chatId = chat.id;
+            return res.status(400).json({error: 'Chat ID is required'});
         }
 
         //Validate if chatId and content are provided. Throw an error if this is not the case
