@@ -2,146 +2,123 @@ import React, { useEffect, useState } from "react";
 import FilledButton from "@/components/buttons/filled-button";
 import { useUserStore } from "@/app/chats/stores/users";
 import axios from "@/http/axios";
+import { useChatStore } from "@/app/chats/stores/chats";
+import { useRouter } from "next/navigation";
+import { useModalStore } from "@/app/chats/stores/modal";
 
 const AddGroupUserModel = ({ onClose }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [groupName, setGroupName] = useState('');
-    const [selectedUsers, setSelectedUsers] = useState([]);
-  
+  const [groupName, setGroupName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState({});
+  const [loading, setLoading] = useState(false);
+  const createGroupChat = useChatStore((state) => state.createGroupChat);
+  const closeModal = useModalStore((state) => state.close);
+  const router = useRouter();
+
   const { users, fetchUsers } = useUserStore();
 
   useEffect(() => {
-    if (isModalOpen) {
-      //Fetch users when modal opens
-      console.log("Fetching users...");
-      fetchUsers();
-     }
-  }, [isModalOpen, fetchUsers])
+    fetchUsers();
+  }, []);
 
-  console.log("Users: ", users);
+  const handleGroupNameChange = (event) => {
+    setGroupName(event.target.value);
+  };
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+  const handleUserCardClick = (userId) => {
+    setSelectedUsers((prevSelectedUsers) => {
+      const newSelectedUsers = { ...prevSelectedUsers };
+      if (newSelectedUsers[userId]) {
+        delete newSelectedUsers[userId];
+        return newSelectedUsers;
+      }
 
-    const handleGroupNameChange = (event) => {
-        setGroupName(event.target.value)
-    };
+      newSelectedUsers[userId] = true;
+      return newSelectedUsers;
+    });
+  };
 
-    const handleUserCardClick = (userId) => {
-      setSelectedUsers((prevSelectedUsers) => {
-        const userToAdd = users.find((user) => user.id === userId);
-        if (!userToAdd) return prevSelectedUsers;
+  const handleCreateGroup = async () => {
+    try {
+      setLoading(true);
+      const userIds = Object.keys(selectedUsers);
 
-            if (prevSelectedUsers.some((user) => user.id === userId)) {
-              return prevSelectedUsers.filter((id) => id !== userId);
-            } else {
-              return [...prevSelectedUsers, userId];
-            }
-        });
-    };
+      // validate values
+      if (!groupName) {
+        alert("Group name is required");
+        return;
+      }
 
-    const handleCreateGroup = async () => {
-        try {
-          //Perform group creation logic here(e.g. API call)
-          console.log(`Creating group "${groupName}" with users:`, selectedUsers);
+      if (userIds.length < 2) {
+        alert("Select at least 2 users to create a group");
+        return;
+      }
 
-          const userIds = selectedUsers.map(user => user.id);
+      createGroupChat(groupName, userIds).then((chat) => {
+        router.push(`/chats/${chat.id}`);
+        closeModal();
+      });
+    } catch (error) {
+      console.error("Error creating group: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-          if (!groupName || userIds.length === 0) {
-            throw new Error("Group Name and User(s) are required")
-          }
-          
-          console.log("User Ids: ", userIds);
-
-          //Make API call to create the group
-          const response = await axios.post("/groups", {
-            groupName: groupName,
-            userIds: userIds,
-          });
-
-          console.log("Response: ", response.data);
-
-          // if (response.status !== 200) {
-          //   throw new Error("Failed to create group");
-          // }
-
-          if (response.status === 201) {
-            //Reset state and close modal
-            setGroupName('');
-            setSelectedUsers([]);
-            setIsModalOpen(false);
-            onClose(); //Close modal
-          } else {
-            throw new Error("Failed to create the group");
-          }
-        } catch (error) {
-          console.error("Error creating group: ", error);
-        }
-    };
-
-    return (
-      <div>
-        {isModalOpen && (
-          <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white rounded-lg p-6 w-96 relative">
-              
-              {/*Modal Header */}
-              <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
-                Create Group
-              </h2>
-              <button
-                className="text-red-600 hover:text-red-800 bg-red-200 px-3 py-1 rounded"
-                onClick={onClose}
-                style={{ marginLeft: "auto" }}
-              >
-                Close
-              </button>
-
-              {/*Group Name input */}
-              <label htmlFor="groupName" className="block mb-2">
-                Group Name:
-              </label>
-              <input
-                type="text"
-                id="groupName"
-                value={groupName}
-                onChange={handleGroupNameChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-3 mb-4 focus:outline-none focus:border-blue-500"
-              />
-
-              {/*User list display */}
-              <div className="grid grid-cols-2 gap-4">
-                {users.map((user) => (
-                  <div
-                    key={user.id}
-                    className={`p-3 border rounded-md cursor-pointer ${
-                      selectedUsers.includes(user.id)
-                        ? "bg-blue-100"
-                        : "hover:bg-gray-100"
-                    }`}
-                    onClick={() => handleUserCardClick(user.id)}
-                  >
-                    {user.username}
-                  </div>
-                ))}
-              </div>
-
-              {/*Create Group Button */}
-              <div className="mt-6 flex justify-center">
-                <FilledButton type="primary" onClick={handleCreateGroup}>
-                  Create Group
-                </FilledButton>
-              </div>
-            </div>
+  return (
+    <div>
+      <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
+        <div className="bg-white rounded-lg p-6 w-96 relative">
+          {/*Modal Header */}
+          <div className="my-4 flex justify-between items-center gap-4">
+            <h2 className="text-xl font-semibold">Create Group</h2>
+            <FilledButton dense type="danger" onClick={onClose}>
+              {" "}
+              Close
+            </FilledButton>
           </div>
-        )}
-        {/*Button to open User Selection Modal */}
-        <FilledButton stretch type="secondary" onClick={openModal}>
-          + Add User to Group
-        </FilledButton>
+
+          {/*Group Name input */}
+          <label htmlFor="groupName" className="block mb-2">
+            Group Name:
+          </label>
+          <input
+            type="text"
+            id="groupName"
+            value={groupName}
+            onChange={handleGroupNameChange}
+            className="w-full border border-gray-300 rounded-md px-3 py-3 mb-4 focus:outline-none focus:border-blue-500"
+          />
+
+          {/*User list display */}
+          <div className="grid grid-cols-2 gap-4">
+            {users.map((user) => (
+              <div
+                key={user.id}
+                className={`p-3 border rounded-md cursor-pointer ${
+                  selectedUsers[user.id] ? "bg-amber-50" : "hover:bg-gray-100"
+                }`}
+                onClick={() => handleUserCardClick(user.id)}
+              >
+                {user.username}
+              </div>
+            ))}
+          </div>
+
+          {/*Create Group Button */}
+          <div className="mt-6 flex justify-center">
+            <FilledButton
+              type="primary"
+              stretch
+              isLoading={loading}
+              onClick={handleCreateGroup}
+            >
+              Create Group
+            </FilledButton>
+          </div>
+        </div>
       </div>
-    );
+    </div>
+  );
 };
 
 export default AddGroupUserModel;
