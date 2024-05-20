@@ -26,9 +26,9 @@ instance.interceptors.response.use(
   (error) => {
     const response = error.response;
     if (
-      response.status === 403 &&
-      response.data &&
-      response.data.invalidToken
+      response?.status === 403 &&
+      response?.data &&
+      response?.data?.invalidToken
     ) {
       localStorage.removeItem("token");
       window.location.href = "/login";
