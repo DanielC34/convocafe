@@ -1,8 +1,8 @@
 import React from "react";
-import useConversation from "../../zustand/useConversation.js";
+import useConversation from "../../zustand/useConversation";
 import { useSocketContext } from "../../context/SocketContext.jsx";
 import { CiMenuFries } from "react-icons/ci";
-import Icon from "../../assets/icon.png";
+import Icon from "../../assets/icon.jpg";
 
 function Chatuser() {
   const { selectedConversation } = useConversation();

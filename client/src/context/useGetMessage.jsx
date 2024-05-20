@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useConversation from "../zustand/useConversation.js";
+import useConversation from "../zustand/useConversation";
 import axios from "axios";
 const useGetMessage = () => {
   const [loading, setLoading] = useState(false);

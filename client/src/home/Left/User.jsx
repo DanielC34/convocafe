@@ -1,5 +1,5 @@
 import React from "react";
-import useConversation from "../../zustand/useConversation.js";
+import useConversation from "../../zustand/useConversation";
 import Icon from "../../assets/icon.png";
 import { useSocketContext } from "../../context/SocketContext.jsx";
 
