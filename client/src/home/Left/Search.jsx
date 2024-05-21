@@ -3,7 +3,9 @@ import { FaSearch } from "react-icons/fa";
 import useGetAllUsers from "../../context/useGetAllUser";
 import useConversation from "../../zustand/useConversation";
 import toast from "react-hot-toast";
-function Search() {
+
+
+const Search = () => {
   const [search, setSearch] = useState("");
   const [allUsers] = useGetAllUsers();
   const { setSelectedConversation } = useConversation();

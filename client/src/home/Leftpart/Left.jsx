@@ -4,7 +4,7 @@ import Users from "../Left/Users";
 import UserDetails from "../Left/UserDetails";
 import Logout from "../Left/Logout";
 
-function Left() {
+const Left = () => {
   return (
     <div className="w-full bg-black text-gray-300">
       {/* <UserDetails /> */}

@@ -5,7 +5,9 @@ import logo from "../assets/logo.png";
 import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-function Signup() {
+
+
+const Signup = () => {
   const [authUser, setAuthUser] = useAuth();
   const {
     register,

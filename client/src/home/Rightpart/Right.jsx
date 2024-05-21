@@ -6,7 +6,7 @@ import useConversation from "../../zustand/useConversation";
 import { useAuth } from "../../context/AuthProvider.jsx";
 import { CiMenuFries } from "react-icons/ci";
 
-function Right() {
+const Right = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   useEffect(() => {
     return setSelectedConversation(null);

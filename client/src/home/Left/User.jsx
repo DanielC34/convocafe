@@ -3,7 +3,7 @@ import useConversation from "../../zustand/useConversation";
 import Icon from "../../assets/icon.png";
 import { useSocketContext } from "../../context/SocketContext.jsx";
 
-function User({ user }) {
+const User = ({ user }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelected = selectedConversation?._id === user._id;
   const { socket, onlineUsers } = useSocketContext();

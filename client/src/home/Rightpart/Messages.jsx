@@ -3,7 +3,9 @@ import Message from "./Message";
 import useGetMessage from "../../context/useGetMessage";
 import Loading from "../../components/Loading.jsx";
 import useGetSocketMessage from "../../context/useGetSocketMessage";
-function Messages() {
+
+
+const Messages = () => {
   const { loading, messages } = useGetMessage();
   useGetSocketMessage(); // listing incoming messages
   console.log(messages);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IoSend } from "react-icons/io5";
 import useSendMessage from "../../context/useSendMessage";
 
-function Typesend() {
+const Typesend = () => {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
   const { loading, sendMessages } = useSendMessage();

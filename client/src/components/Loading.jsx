@@ -1,6 +1,8 @@
+//This is a React component for displaying a loading animation with skeleton elements
+
 import React from "react";
 
-function Loading() {
+const Loading = () => {
   return (
     <div className="flex h-screen items-center justify-center bg-slate-600">
       <div className="flex flex-col gap-4 w-52">

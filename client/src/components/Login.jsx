@@ -1,3 +1,6 @@
+// This is a React component for handling user login functionality using axios for API calls and react-hook-form for form validation.
+// It also uses context API for authentication and react-hot-toast for displaying success and error messages.
+
 import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -6,7 +9,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import toast from "react-hot-toast";
 
-function Login() {
+const Login = () => {
   const [authUser, setAuthUser] = useAuth();
 
   const {

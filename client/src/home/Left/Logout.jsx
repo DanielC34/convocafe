@@ -4,7 +4,9 @@ import { BsBoxArrowLeft } from "react-icons/bs";
 import axios from "axios";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-function Logout() {
+
+
+const Logout = () => {
   const [loading, setLoading] = useState(false);
   const handleLogout = async () => {
     setLoading(true);
