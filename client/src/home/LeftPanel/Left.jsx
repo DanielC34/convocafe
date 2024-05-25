@@ -1,8 +1,8 @@
 import React from "react";
-import Search from "../Left/Search";
-import Users from "../Left/Users";
-import UserDetails from "../Left/UserDetails";
-import Logout from "../Left/Logout";
+import Search from "../Sidebar/Search";
+import Users from "../Sidebar/Users";
+import UserDetails from "../Sidebar/UserDetails";
+import Logout from "../Sidebar/Logout";
 
 const Left = () => {
   return (

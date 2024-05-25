@@ -1,12 +1,11 @@
 import React from "react";
-import Left from "./home/Leftpart/Left";
-import Right from "./home/Rightpart/Right";
+import Left from "./home/LeftPanel/Left";
+import MessageSpace from "./home/ChatSpace/MessageSpace";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { useAuth } from "./context/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
-
 
 function App() {
   const [authUser, setAuthUser] = useAuth();
@@ -25,7 +24,7 @@ function App() {
                   className="drawer-toggle"
                 />
                 <div className="drawer-content flex flex-col items-center justify-center">
-                  <Right />
+                  <MessageSpace />
                 </div>
                 <div className="drawer-side">
                   <label

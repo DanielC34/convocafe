@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import Chatuser from "./Chatuser";
-import Messages from "./Messages";
-import Typesend from "./Typesend";
-import useConversation from "../../zustand/useConversation";
+import Chatuser from "./Chatuser.jsx";
+import Messages from "./Messages.jsx";
+import Typesend from "./Typesend.jsx";
+import useConversation from "../../zustand/useConversation.jsx";
 import { useAuth } from "../../context/AuthProvider.jsx";
 import { CiMenuFries } from "react-icons/ci";
 
-const Right = () => {
+const MessageSpace = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   useEffect(() => {
     return setSelectedConversation(null);
@@ -31,9 +31,9 @@ const Right = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Right;
+export default MessageSpace;
 
 const NoChatSelected = () => {
   const [authUser] = useAuth();

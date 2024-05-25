@@ -1,5 +1,5 @@
 import React from "react";
-import useConversation from "../../zustand/useConversation";
+import useConversation from "../../zustand/useConversation.jsx";
 import { useSocketContext } from "../../context/SocketContext.jsx";
 import { CiMenuFries } from "react-icons/ci";
 import Icon from "../../assets/icon.jpg";
@@ -34,6 +34,6 @@ const Chatuser = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Chatuser;

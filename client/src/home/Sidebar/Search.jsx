@@ -10,6 +10,8 @@ const Search = () => {
   const [allUsers] = useGetAllUsers();
   const { setSelectedConversation } = useConversation();
   console.log(allUsers);
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!search) return;
@@ -23,6 +25,8 @@ const Search = () => {
       toast.error("User not found");
     }
   };
+
+  
   return (
     <div className=" h-[10vh] mb-4">
       <div className="px-6 py-4">
