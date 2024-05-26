@@ -62,13 +62,14 @@ const Signup = () => {
               style={{ filter: "invert(100%)" }}
             />
             <h1 className="text-2xl text-center text-white">
-              Convo<span className="text-green-500 font-semibold">Cafe</span>
+              Convo<span className="text-red-500 font-semibold">Cafe</span>
             </h1>
           </div>
           <h2 className="text-xl text-white font-bold text-center mb-4">
             Sign Up
           </h2>
           <br />
+
           {/* Fullname */}
           <label className="input input-bordered flex items-center gap-2">
             <svg
@@ -178,7 +179,7 @@ const Signup = () => {
               New user?
               <Link
                 to="/login"
-                className="text-green-500 underline cursor-pointer ml-1"
+                className="text-red-500 underline cursor-pointer ml-1"
               >
                 Log In
               </Link>
@@ -189,7 +190,7 @@ const Signup = () => {
             <input
               type="submit"
               value="Sign up"
-              className="text-white bg-green-500 px-4 py-2 cursor-pointer rounded-lg text-lg font-semibold"
+              className="text-white bg-red-500 px-4 py-2 cursor-pointer rounded-lg text-lg font-semibold"
             />
           </div>
         </form>

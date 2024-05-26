@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Chatuser from "./Chatuser.jsx";
 import Messages from "./Messages.jsx";
+import logo from '../../assets/logo.png';
 import Typesend from "./Typesend.jsx";
 import useConversation from "../../zustand/useConversation.jsx";
 import { useAuth } from "../../context/AuthProvider.jsx";
@@ -49,13 +50,16 @@ const NoChatSelected = () => {
         </label>
         <div className="flex h-screen items-center justify-center">
           <h1 className="text-center">
-            Welcome to ConvoCafe,{" "}
+            {/* <img
+              src={logo}
+              alt="Coffee logo"
+              style={{ width: "40px", height: "40px", marginLeft: "10px" }}
+            /> */}
             <span className="font-semibold text-xl">
-              {authUser.user.fullname}!!
+              Welcome to ConvoCafe, {authUser.user.fullname}!!
             </span>
             <br />
-            No chat selected, please start conversation by selecting anyone to
-            your contacts
+            Pick any of your contacts and start a conversation!!
           </h1>
         </div>
       </div>

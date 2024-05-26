@@ -6,23 +6,27 @@ import toast from "react-hot-toast";
 
 
 const Search = () => {
-  const [search, setSearch] = useState("");
-  const [allUsers] = useGetAllUsers();
-  const { setSelectedConversation } = useConversation();
+  const [search, setSearch] = useState(""); //State to manage the search input
+  const [allUsers] = useGetAllUsers(); //Fetch all users using custom hook
+  const { setSelectedConversation } = useConversation(); // Get the function to set selected conversation from Zustand store
   console.log(allUsers);
 
-
+//Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!search) return;
+    //Find a user whose fullname matches the search input
     const conversation = allUsers.find((user) =>
       user.fullname?.toLowerCase().includes(search.toLowerCase())
     );
+
     if (conversation) {
+      //Set the selected conversation is user is found
       setSelectedConversation(conversation);
-      setSearch("");
+      setSearch(""); //Clear the search input bar
     } else {
-      toast.error("User not found");
+      toast.error("User not found"); //Display the error message if user not found
     }
   };
 

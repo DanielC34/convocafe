@@ -7,7 +7,6 @@ import Logout from "../Sidebar/Logout";
 const Left = () => {
   return (
     <div className="w-full bg-black text-gray-300">
-      {/* <UserDetails /> */}
       <Search style={{ marginBottom: "60px" }} />
       <div
         className=" flex-1  overflow-y-auto"
