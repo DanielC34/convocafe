@@ -1,14 +1,13 @@
-'use client'
+"use client";
 
-import FilledButton from "@/components/buttons/filled-button";
 import ChatTextInput from "@/app/chats/components/chatTextInput";
 import Divider from "@/components/divider";
-import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import MessagesListView from "@/app/chats/components/messageListView";
-import {useChatStore} from "@/app/chats/stores/chats";
-import {useAuthStore} from "@/app/stores/auth";
-import {isAuth} from "@/utils/auth";
+import { useChatStore } from "@/app/chats/stores/chats";
+import { useAuthStore } from "@/app/stores/auth";
+import { isAuth } from "@/utils/auth";
 
 // Defining the ChatByIDPage component
 const ChatByIDPage = ({ params }) => {
@@ -40,7 +39,9 @@ const ChatByIDPage = ({ params }) => {
         const recipient = fetchedChat.participants.find(
           (user) => user.id !== authUser?.id
         );
-        setRecipient(recipient);
+        setRecipient(
+          fetchedChat.type === "group" ? fetchedChat?.name : recipient?.username
+        );
       }
     } catch (e) {
       console.log(e);
@@ -66,15 +67,15 @@ const ChatByIDPage = ({ params }) => {
                 flex justify-between items-center
             "
       >
-        <h2 className="text-2xl"> {recipient?.username}</h2>
+        <h2 className="text-2xl"> {recipient}</h2>
       </div>
 
       <Divider />
       <MessagesListView chatId={chatId} />
-      <ChatTextInput chatId={chatId} recipientId={recipient?.id} />
+      <ChatTextInput chatId={chatId} />
     </>
   );
-}
+};
 
 // Exporting the component with authentication check
 export default isAuth(ChatByIDPage);
