@@ -6,6 +6,9 @@ import Typesend from "./Typesend.jsx";
 import useConversation from "../../zustand/useConversation.jsx";
 import { useAuth } from "../../context/AuthProvider.jsx";
 import { CiMenuFries } from "react-icons/ci";
+//import GroupChatModal from "../modals/GroupChatModal";
+
+//        <GroupChatModal isOpen={isModalOpen} onClose={handleCloseModal} />
 
 const MessageSpace = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
