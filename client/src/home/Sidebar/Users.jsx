@@ -4,7 +4,7 @@ import GroupChatModal from "../modals/GroupChatModal";
 import { GrGroup } from "react-icons/gr";
 import useGetAllUsers from "../../context/useGetAllUser";
 
-const Users = ({ onOpenModal}) => {
+const Users = () => {
   const [allUsers, loading] = useGetAllUsers(); //Fetch all users and loading state
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,7 +46,7 @@ const Users = ({ onOpenModal}) => {
         ))}
       </div>
 
-      {/*Modal rendering moved here */}
+      {/*Modal rendering */}
       <GroupChatModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );

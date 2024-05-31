@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message.jsx";
-import GroupChatModal from "../modals/GroupChatModal";
 import useGetMessage from "../../context/useGetMessage.jsx";
 import Loading from "../../components/Loading.jsx";
 import useGetSocketMessage from "../../context/useGetSocketMessage.jsx";
@@ -11,15 +10,6 @@ const Messages = () => {
   console.log(messages);
 
   const lastMsgRef = useRef();
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // const handleOpenModal = () => {
-    //   setIsModalOpen(true);
-    // };
-
-    // const handleCloseModal = () => {
-    //   setIsModalOpen(false);
-    // };
 
 
 
