@@ -3,28 +3,24 @@ import { IoSend } from "react-icons/io5";
 import useSendMessage from "../../context/useSendMessage";
 
 const Typesend = () => {
-  const [message, setMessage] = useState("");
-  const [file, setFile] = useState(null);
-  const { loading, sendMessages } = useSendMessage();
+  const [message, setMessage] = useState(""); //State to manage the message input
+  const { loading, sendMessages } = useSendMessage(); //Custom hook to manage sending messages
 
+  //Handle form submission
   const handleSubmit = async (e) => {
-    console.log(e);
-    e.preventDefault();
+    console.log(e); //Log the event for debugging
+    e.preventDefault(); //Prevent default form submission
+
     if (message) {
       try {
-        await sendMessages(message, file); // Assuming sendMessages can also handle file
-        setMessage("");
-        setFile(null); // Clear the file after sending
-      } catch (error) {
-        console.error("Failed to send message:", error);
+        await sendMessages(message);  //Send the message(file attachement to be implemented later)
+        setMessage(""); //Clear the message input after sending the message
+      } catch (error) { 
+        console.error("Failed to send message:", error); //Log any errors
       }
     }
   };
 
-  // const handleFileChange = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   setFile(selectedFile);
-  // };
 
   return (
     <form onSubmit={handleSubmit}>
