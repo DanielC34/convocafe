@@ -6,7 +6,6 @@ import useGetAllUsers from "../../context/useGetAllUser";
 
 const Users = () => {
   const [allUsers, loading] = useGetAllUsers(); //Fetch all users and loading state
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -25,13 +24,13 @@ const Users = () => {
       <div className="flex justify-between items-center px-8 py-2 text-white font-semibold bg-slate-800 rounded-md">
         <h1 className="flex items-center">
           <span className="mr-10 py-1">Messages</span>
-          <button
+          {/* <button
             className="flex items-center ml-2 text-sm text-white border border-white hover:bg-white hover:text-black px-2 py-1 rounded-md"
             onClick={handleOpenModal}
           >
             <GrGroup className="text-xl " />
             <span className="ml-2">+Group chat</span>
-          </button>
+          </button> */}
         </h1>
       </div>
 
